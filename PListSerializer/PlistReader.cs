@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace PListSerializer
 {
-    class Program
+    static class PlistReader
     {
-        static void Main(string[] args)
+        public static string ToString(this byte[] pListBytes)
         {
-            Console.WriteLine(Resources.PList1);
-            Console.ReadLine();
+            var result = Encoding.UTF8.GetString(pListBytes);
+            return result;
         }
     }
 }
