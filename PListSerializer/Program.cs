@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PListNet;
 
 namespace PListSerializer
 {
@@ -10,8 +12,9 @@ namespace PListSerializer
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Resources.PList1);
-            Console.ReadLine();
+            byte[] byteArray = Encoding.ASCII.GetBytes(Resources.PList1);
+            MemoryStream stream = new MemoryStream(byteArray);
+            var node = PList.Load(stream);
         }
     }
 }
