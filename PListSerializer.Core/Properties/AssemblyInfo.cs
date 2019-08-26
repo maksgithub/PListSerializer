@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PListSerializer")]
+[assembly: AssemblyTitle("PListSerializer.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PListSerializer")]
+[assembly: AssemblyProduct("PListSerializer.Core")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("863ac78c-4442-413d-912a-009d7c1e05ef")]
+[assembly: Guid("b49c2ed6-53a3-4760-b03c-01aa2dfdad52")]
 
 // Version information for an assembly consists of the following four values:
 //

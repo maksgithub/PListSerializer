@@ -10,7 +10,5 @@ namespace PListSerializer
 {
     static class PlistExtensions
     {
-       
-
     }
 }
