@@ -44,8 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\IntegerConverter.cs" />
+    <Compile Include="Converters\IPlistConverter.cs" />
+    <Compile Include="Converters\ObjectConverter.cs" />
     <Compile Include="Deserializer.cs" />
     <Compile Include="Extensions\PlistExtensions.cs" />
+    <Compile Include="Converters\PrimitiveConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
