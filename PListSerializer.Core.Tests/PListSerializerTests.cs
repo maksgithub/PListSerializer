@@ -18,9 +18,10 @@ namespace PListSerializer.Core.Tests
             var stream = new MemoryStream(byteArray);
             var node = PList.Load(stream);
             var d = new Deserializer();
-            var r = d.Deserialize<quiz>(node);
+            var r = d.Deserialize<question>(node);
             Assert.IsNotNull(r);
-            Assert.AreEqual("rt",r.question);
+            Assert.AreEqual("What does 'API' stand for?", r.text);
+            Assert.AreEqual("API stands for Application Programming Interface.", r.answer);
         }
     }
 }

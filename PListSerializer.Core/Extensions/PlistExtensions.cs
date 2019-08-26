@@ -1,14 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 using PListNet;
+using PListNet.Nodes;
 
-namespace PListSerializer
+namespace PListSerializer.Core.Extensions
 {
-    static class PlistExtensions
+    public static class PlistExtensions
     {
+        public static T GetValue<T>(this PNode pNode, string key)
+        {
+            if (pNode is DictionaryNode dNode)
+            {
+                if (dNode.TryGetValue(key, out var dNodeValue))
+                {
+                    if (dNodeValue is PNode<T> genericSubNode)
+                    {
+                        return genericSubNode.Value;
+                    }
+
+                    if (dNodeValue is T subNode)
+                    {
+                        return subNode;
+                    }
+                }
+            }
+
+            return default;
+        }
     }
 }
