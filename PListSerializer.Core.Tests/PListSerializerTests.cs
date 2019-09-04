@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -70,6 +71,7 @@ namespace PListSerializer.Core.Tests
             Assert.IsInstanceOfType(res, typeof(DateTime));
             Assert.AreEqual(source, res);
         }
+
         [TestCase]
         public void Serialize_quiz_Test()
         {
@@ -87,5 +89,41 @@ namespace PListSerializer.Core.Tests
             Assert.AreEqual("4242422", r.question1.text3);
             Assert.AreEqual("4242422", r.question1.text4);
         }
+
+        [TestCase]
+        public void Serialize_Effect_Test()
+        {
+            var byteArray = Encoding.ASCII.GetBytes(Resources.Plist2);
+            var stream = new MemoryStream(byteArray);
+            var node = PList.Load(stream);
+            var d = new Deserializer();
+            var r = d.Deserialize<plist>(node);
+            Assert.IsNotNull(r);
+            Assert.AreEqual("Custom", r.group_identifier);
+            Assert.AreEqual("Clarity Booster - 2018.lmp", r.kMPPresetIdentifierKey);
+            Assert.AreEqual(true, r.Hidden);
+            Assert.AreEqual("259F230F-A18A-489C-87FE-024B503E1F5C", r.uuid);
+            //Assert.IsNotNull(r.AdjustmentLayers);
+
+            //Assert.IsNotNull(r.question1);C:\Users\MARS\source\repos\PListSerializer\PListSerializer.Core.Tests\packages.config
+            //Assert.AreEqual("4242422", r.question1.text);
+            //Assert.AreEqual("4242422", r.question1.text2);
+            //Assert.AreEqual("4242422", r.question1.text3);
+            //Assert.AreEqual("4242422", r.question1.text4);
+        }
+    }
+
+    public class plist
+    {
+        public string group_identifier { get; set; }
+        public string kMPPresetIdentifierKey { get; set; }
+        public int priority { get; set; }
+        public bool Hidden { get; set; }
+        public string uuid { get; set; }
+        //public List<AdjustmentLayer> AdjustmentLayers { get; set; }
+    }
+
+    public class AdjustmentLayer
+    {
     }
 }

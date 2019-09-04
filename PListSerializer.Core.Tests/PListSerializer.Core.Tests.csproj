@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="PListSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Resources\Plist2.txt" />
     <Compile Include="TestObjects\question.cs" />
   </ItemGroup>
   <ItemGroup>

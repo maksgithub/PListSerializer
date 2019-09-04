@@ -28,7 +28,10 @@ namespace PListSerializer.Core.Converters
                 pair => pair.Key.Name,
                 pair => BuildDeserializeMethod(pair.Key, pair.Value));
 
-            _deserializeMethods.Add(p.Name, BuildDeserializeMethod(p, this));
+            if (p != null)
+            {
+                _deserializeMethods.Add(p.Name, BuildDeserializeMethod(p, this));
+            }
             _equalityComparer = EqualityComparer<TObject>.Default;
         }
 

@@ -2,6 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>group_identifier</key>
+	<string>Custom</string>
+	<key>kMPPresetIdentifierKey</key>
+	<string>Clarity Booster - 2018.lmp</string>
+	<key>priority</key>
+	<integer>0</integer>
+	<key>Hidden</key>
+	<true/>
+	<key>uuid</key>
+	<string>259F230F-A18A-489C-87FE-024B503E1F5C</string>
 	<key>AdjustmentLayers</key>
 	<array>
 		<dict>
@@ -129,13 +139,5 @@
 			</dict>
 		</dict>
 	</array>
-	<key>group_identifier</key>
-	<string>Custom</string>
-	<key>kMPPresetIdentifierKey</key>
-	<string>Clarity Booster - 2018.lmp</string>
-	<key>priority</key>
-	<integer>0</integer>
-	<key>uuid</key>
-	<string>259F230F-A18A-489C-87FE-024B503E1F5C</string>
 </dict>
 </plist>
