@@ -1,9 +1,12 @@
-﻿using PListNet;
+﻿using System;
+using PListNet;
 
 namespace PListSerializer.Core.Converters
 {
 
-    public interface IPlistConverter { }
+    public interface IPlistConverter
+    {
+    }
     public interface IPlistConverter<T> : IPlistConverter
     {
         T Deserialize(PNode node);

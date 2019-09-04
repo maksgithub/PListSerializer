@@ -80,7 +80,6 @@ namespace PListSerializer.Core.Tests
             var r = d.Deserialize<question>(node);
             Assert.IsNotNull(r);
             Assert.AreEqual("What does 'API' stand for?", r.text);
-            Assert.AreEqual("API stands for Application Programming Interface.", r.answer);
 
             Assert.IsNotNull(r.question1);
             Assert.AreEqual("4242422", r.question1.text);

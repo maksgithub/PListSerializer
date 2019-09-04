@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using PListNet;
@@ -48,9 +49,9 @@ namespace PListSerializer.Core
         {
             var outType = typeof(TOut);
             var converter = GetOrBuildConverter(outType);
-           // using (var tokenizer = new JsonTokenizer(source, _buffer))
+            // using (var tokenizer = new JsonTokenizer(source, _buffer))
             {
-               // if (outType.IsPrimitive || outType == typeof(string)) tokenizer.MoveNext();
+                // if (outType.IsPrimitive || outType == typeof(string)) tokenizer.MoveNext();
 
                 var typedConverter = (IPlistConverter<TOut>)converter;
                 return typedConverter.Deserialize(source);
@@ -79,12 +80,16 @@ namespace PListSerializer.Core
                 return default;
             }
 
-            var objectPropertyConverters = type
-                .GetProperties()
+            var properties = type.GetProperties().ToList();
+            Dictionary<PropertyInfo, IPlistConverter> objectPropertyConverters = properties
+                .Where(x => x.PropertyType != type)
                 .ToDictionary(p => p, p => GetOrBuildConverter(p.PropertyType));
 
-            var objectConverterType = typeof(ObjectConverter<>).MakeGenericType(type);
-            return (IPlistConverter)Activator.CreateInstance(objectConverterType, objectPropertyConverters);
+            PropertyInfo p1 = properties.FirstOrDefault(x => x.PropertyType == type);
+            Type objectConverterType = typeof(ObjectConverter<>).MakeGenericType(type);
+            IPlistConverter plistConverter = (IPlistConverter)Activator
+                .CreateInstance(objectConverterType, objectPropertyConverters, p1);
+            return plistConverter;
         }
     }
 }

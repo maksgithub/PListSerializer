@@ -15,7 +15,8 @@ namespace PListSerializer.Core.Converters
         private readonly EqualityComparer<TObject> _equalityComparer;
         private readonly Dictionary<string, Action<TObject, PNode>> _deserializeMethods;
 
-        public ObjectConverter(Dictionary<PropertyInfo, IPlistConverter> propertyConverters)
+        public ObjectConverter(Dictionary<PropertyInfo, 
+            IPlistConverter> propertyConverters, PropertyInfo p)
         {
             var outInstanceConstructor = typeof(TObject).GetConstructor(Array.Empty<Type>());
 
@@ -27,9 +28,19 @@ namespace PListSerializer.Core.Converters
                 pair => pair.Key.Name,
                 pair => BuildDeserializeMethod(pair.Key, pair.Value));
 
+            _deserializeMethods.Add(p.Name, BuildDeserializeMethod(p, this));
             _equalityComparer = EqualityComparer<TObject>.Default;
         }
 
+
+        public void Add()
+        {
+            throw new NotImplementedException();
+        }
+        public void Add(string key, Action<TObject, PNode> value)
+        {
+            _deserializeMethods.Add(key, value);
+        }
         public TObject Deserialize(PNode tokenizer1)
         {
             var instance = _activator();
@@ -39,24 +50,9 @@ namespace PListSerializer.Core.Converters
                 while (tokenizer.MoveNext())
                 {
                     var token = tokenizer.Current;
-                    //var tokenType = token.;
-
-                    // ReSharper disable once ConvertIfStatementToSwitchStatement
-                    //if (tokenType == JsonTokenType.Null) return default;
-                    //if (tokenType == JsonTokenType.ObjectStart) continue;
-                    //if (tokenType == JsonTokenType.ObjectEnd) break;
-
-                    //if (tokenType != JsonTokenType.Property)
-                    //{
-                    //    throw new InvalidCastException($"Invalid token '{token}' in object");
-                    //}
-
                     var propertyName = token.Key;
-
-                    //tokenizer.MoveNext(); // to property value
-
-                    //if (tokenizer.Current.Value == null) continue;
-                    if (!_deserializeMethods.TryGetValue(propertyName, out var converter)) continue;
+                    if (!_deserializeMethods.TryGetValue(propertyName, out var converter))
+                        continue;
 
                     converter(instance, token.Value);
                 }

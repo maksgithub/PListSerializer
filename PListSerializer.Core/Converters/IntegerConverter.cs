@@ -13,5 +13,10 @@ namespace PListSerializer.Core.Converters
 
             return default;
         }
+
+        public void Add()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
