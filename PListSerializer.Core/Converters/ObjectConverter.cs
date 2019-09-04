@@ -45,7 +45,7 @@ namespace PListSerializer.Core.Converters
         {
             var instance = _activator();
             if (tokenizer1 is DictionaryNode tokenizer2)
-            {
+            { 
                 var tokenizer = tokenizer2.GetEnumerator();
                 while (tokenizer.MoveNext())
                 {

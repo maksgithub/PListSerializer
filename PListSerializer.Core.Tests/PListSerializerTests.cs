@@ -83,6 +83,9 @@ namespace PListSerializer.Core.Tests
 
             Assert.IsNotNull(r.question1);
             Assert.AreEqual("4242422", r.question1.text);
+            Assert.AreEqual("4242422", r.question1.text2);
+            Assert.AreEqual("4242422", r.question1.text3);
+            Assert.AreEqual("4242422", r.question1.text4);
         }
     }
 }

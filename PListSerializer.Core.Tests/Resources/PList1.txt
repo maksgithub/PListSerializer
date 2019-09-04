@@ -8,6 +8,12 @@
 		<dict>
 			<key>text</key>
 			<string>4242422</string>
+			<key>text2</key>
+			<string>4242422</string>
+			<key>text3</key>
+			<string>4242422</string>
+			<key>text4</key>
+			<string>4242422</string>
 		</dict>
 	</dict>
 </plist>
