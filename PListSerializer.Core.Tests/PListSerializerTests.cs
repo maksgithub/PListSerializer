@@ -99,10 +99,10 @@ namespace PListSerializer.Core.Tests
             var d = new Deserializer();
             var r = d.Deserialize<plist>(node);
             Assert.IsNotNull(r);
-            Assert.AreEqual("Custom", r.group_identifier);
-            Assert.AreEqual("Clarity Booster - 2018.lmp", r.kMPPresetIdentifierKey);
-            Assert.AreEqual(true, r.Hidden);
-            Assert.AreEqual("259F230F-A18A-489C-87FE-024B503E1F5C", r.uuid);
+            //Assert.AreEqual("Custom", r.group_identifier);
+            //Assert.AreEqual("Clarity Booster - 2018.lmp", r.kMPPresetIdentifierKey);
+            //Assert.AreEqual(true, r.Hidden);
+            //Assert.AreEqual("259F230F-A18A-489C-87FE-024B503E1F5C", r.uuid);
             //Assert.IsNotNull(r.AdjustmentLayers);
 
             //Assert.IsNotNull(r.question1);C:\Users\MARS\source\repos\PListSerializer\PListSerializer.Core.Tests\packages.config
@@ -115,12 +115,12 @@ namespace PListSerializer.Core.Tests
 
     public class plist
     {
-        public string group_identifier { get; set; }
-        public string kMPPresetIdentifierKey { get; set; }
-        public int priority { get; set; }
-        public bool Hidden { get; set; }
-        public string uuid { get; set; }
-        //public List<AdjustmentLayer> AdjustmentLayers { get; set; }
+        //public string group_identifier { get; set; }
+        //public string kMPPresetIdentifierKey { get; set; }
+        //public int priority { get; set; }
+        //public bool Hidden { get; set; }
+        //public string uuid { get; set; }
+        public AdjustmentLayer[] AdjustmentLayers { get; set; }
     }
 
     public class AdjustmentLayer
