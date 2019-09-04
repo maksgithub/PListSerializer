@@ -9,7 +9,7 @@ namespace PListSerializer.Core.Converters
     }
     public interface IPlistConverter<T> : IPlistConverter
     {
-        T Deserialize(PNode node);
+        T Deserialize(PNode rootNode);
     }
 
     //class StringConverter : IPlistConverter<string>

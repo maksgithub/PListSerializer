@@ -44,15 +44,15 @@ namespace PListSerializer.Core.Converters
         {
             _deserializeMethods.Add(key, value);
         }
-        public TObject Deserialize(PNode tokenizer1)
+        public TObject Deserialize(PNode rootNode)
         {
             var instance = _activator();
-            if (tokenizer1 is DictionaryNode tokenizer2)
+            if (rootNode is DictionaryNode dictionaryNode)
             { 
-                var tokenizer = tokenizer2.GetEnumerator();
-                while (tokenizer.MoveNext())
+                var enumerator = dictionaryNode.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    var token = tokenizer.Current;
+                    var token = enumerator.Current;
                     var propertyName = token.Key;
                     if (!_deserializeMethods.TryGetValue(propertyName, out var converter))
                         continue;

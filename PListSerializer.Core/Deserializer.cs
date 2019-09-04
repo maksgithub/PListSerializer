@@ -75,9 +75,8 @@ namespace PListSerializer.Core
                 var arrayElementType = type.GetElementType();
                 var arrayElementConverter = GetOrBuildConverter(arrayElementType);
 
-                //var arrayConverterType = typeof(ArrayConverter<>).MakeGenericType(arrayElementType);
-                //return (IPlistConverter)Activator.CreateInstance(arrayConverterType, arrayElementConverter);
-                return default;
+                var arrayConverterType = typeof(ArrayConverter<>).MakeGenericType(arrayElementType);
+                return (IPlistConverter)Activator.CreateInstance(arrayConverterType, arrayElementConverter);
             }
 
             var properties = type.GetProperties().ToList();
