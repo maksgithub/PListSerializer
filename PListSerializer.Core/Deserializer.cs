@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PListNet;
@@ -38,11 +39,36 @@ namespace PListSerializer.Core
             return _converters.GetOrAdd(type, () => BuildConverter(type));
         }
 
+        public bool IsList(Type type)
+        {
+            if (type == null) return false;
+            return
+                   type.IsGenericType &&
+                   type.GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>));
+        }
+
+        public bool IsDictionary(Type type)
+        {
+            if (type == null) return false;
+            return type.IsGenericType &&
+                   type.GetGenericTypeDefinition().IsAssignableFrom(typeof(Dictionary<,>));
+        }
+
         private IPlistConverter BuildConverter(Type type)
         {
+            if (IsDictionary(type))
+            {
+                Type[] arrayElementType = type.GenericTypeArguments;
+                var keyConverter = GetOrBuildConverter(arrayElementType[0]);
+                var valueConverter = GetOrBuildConverter(arrayElementType[1]);
+
+                var dicitionaryConverterType = typeof(DictionaryConverter<>).MakeGenericType(arrayElementType[1]);
+                return (IPlistConverter)Activator.CreateInstance(dicitionaryConverterType, valueConverter);
+            }
+
             if (type.IsArray)
             {
-                var arrayElementType = type.GetElementType();
+                Type arrayElementType = type.GetElementType();
                 var arrayElementConverter = GetOrBuildConverter(arrayElementType);
 
                 var arrayConverterType = typeof(ArrayConverter<>).MakeGenericType(arrayElementType);

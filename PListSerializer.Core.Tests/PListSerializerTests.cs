@@ -112,19 +112,18 @@ namespace PListSerializer.Core.Tests
         [TestCase]
         public void Serialize_EffectsInfo_Test()
         {
-            var byteArray = Encoding.ASCII.GetBytes(Resources.Plist2);
+            var byteArray = Encoding.ASCII.GetBytes(Resources.Plist3);
             var stream = new MemoryStream(byteArray);
             var node = PList.Load(stream);
             var d = new Deserializer();
-            var r = d.Deserialize<Plist>(node);
-            Assert.IsNotNull(r);
-            Assert.AreEqual("Custom", r.GroupIdentifier);
-            Assert.AreEqual("Clarity Booster - 2018.lmp", r.PresetIdentifierKey);
-            Assert.AreEqual(true, r.Hidden);
-            Assert.AreEqual("259F230F-A18A-489C-87FE-024B503E1F5C", r.Id);
+            var r = d.Deserialize<EffectsPlist>(node);
             Assert.IsNotNull(r.AdjustmentLayers);
-            Assert.IsNotNull(r.AdjustmentLayers[0]);
-            Assert.AreEqual("Normal", r.AdjustmentLayers[0].BlendModeIdentifier);
+            var adjustmentLayer = r.AdjustmentLayers["DevelopAdjustmentLayer"];
+
+            Assert.IsNotNull(adjustmentLayer);
+            Assert.AreEqual("raw_dev2", adjustmentLayer.InfoImageName);
+            Assert.AreEqual("DevelopAdjustmentLayer", adjustmentLayer.Identifier);
+            //Assert.IsNotNull(adjustmentLayer.Sublayers);
         }
     }
 }
