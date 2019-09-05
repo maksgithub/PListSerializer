@@ -19,7 +19,7 @@ namespace PListSerializer.Core.Tests {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -98,16 +98,44 @@ namespace PListSerializer.Core.Tests {
         ///	&lt;string&gt;Clarity Booster - 2018.lmp&lt;/string&gt;
         ///	&lt;key&gt;priority&lt;/key&gt;
         ///	&lt;integer&gt;0&lt;/integer&gt;
+        ///	&lt;key&gt;Hidden&lt;/key&gt;
+        ///	&lt;true/&gt;
         ///	&lt;key&gt;uuid&lt;/key&gt;
         ///	&lt;string&gt;259F230F-A18A-489C-87FE-024B503E1F5C&lt;/string&gt;
         ///	&lt;key&gt;AdjustmentLayers&lt;/key&gt;
         ///	&lt;array&gt;
         ///		&lt;dict&gt;
-        ///			&lt;key&gt;BlendModeIdentifier&lt;/k [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Plist2 {
             get {
                 return ResourceManager.GetString("Plist2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+        ///&lt;plist version=&quot;1.0&quot;&gt;
+        ///&lt;dict&gt;
+        ///	&lt;key&gt;AdjustmentLayers&lt;/key&gt;
+        ///	&lt;dict&gt;
+        ///		&lt;key&gt;DevelopAdjustmentLayer&lt;/key&gt;
+        ///		&lt;dict&gt;
+        ///			&lt;key&gt;Sublayers&lt;/key&gt;
+        ///			&lt;array&gt;
+        ///				&lt;dict&gt;
+        ///					&lt;key&gt;InfoImageName&lt;/key&gt;
+        ///					&lt;string&gt;LensCorrection&lt;/string&gt;
+        ///					&lt;key&gt;EffectsIMG&lt;/key&gt;
+        ///					&lt;array&gt;
+        ///						&lt;dict&gt;
+        ///							&lt;key&gt;Identifier&lt;/key&gt;
+        ///							&lt;string&gt;MIPLLensCorrectionEffect&lt;/string [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Plist3 {
+            get {
+                return ResourceManager.GetString("Plist3", resourceCulture);
             }
         }
     }
