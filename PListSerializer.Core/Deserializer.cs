@@ -58,12 +58,12 @@ namespace PListSerializer.Core
         {
             if (IsDictionary(type))
             {
-                Type[] arrayElementType = type.GenericTypeArguments;
+                var arrayElementType = type.GenericTypeArguments;
                 var keyConverter = GetOrBuildConverter(arrayElementType[0]);
                 var valueConverter = GetOrBuildConverter(arrayElementType[1]);
 
-                var dicitionaryConverterType = typeof(DictionaryConverter<>).MakeGenericType(arrayElementType[1]);
-                return (IPlistConverter)Activator.CreateInstance(dicitionaryConverterType, valueConverter);
+                var dictionaryConverterType = typeof(DictionaryConverter<>).MakeGenericType(arrayElementType[1]);
+                return (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, valueConverter);
             }
 
             if (type.IsArray)
@@ -78,8 +78,12 @@ namespace PListSerializer.Core
             var properties = type.GetProperties();
 
             var propertyInfo = properties.FirstOrDefault(x => x.PropertyType == type);
-            var objectPropertyConverters = properties
+            var propertyInfos = properties
                 .Where(x => x != propertyInfo)
+                //.Where(x => !x.PropertyType.IsGenericType)
+                .ToList();
+
+            var objectPropertyConverters = propertyInfos
                 .ToDictionary(p => p, p => GetOrBuildConverter(p.PropertyType));
 
             var objectConverterType = typeof(ObjectConverter<>).MakeGenericType(type);

@@ -22,6 +22,46 @@ namespace PListSerializer.Core.Tests
             _deserializer = new Deserializer();
         }
 
+        [TestCase]
+        public void Deserialize_Array_Test()
+        {
+            var node = new DictionaryNode();
+            var subNode = new ArrayNode();
+            node.Add("Array", subNode);
+            var res = _deserializer.Deserialize<ClassWithArray>(node);
+            Assert.IsNotNull(res.Array);
+        }
+
+        [TestCase]
+        public void Deserialize_Array_Dictionary()
+        {
+            var node = new DictionaryNode();
+            var subNode = new DictionaryNode();
+            node.Add("Dictionary", subNode);
+            var res = _deserializer.Deserialize<ClassWithDictionary>(node);
+            Assert.IsNotNull(res.Dictionary);
+        }
+
+        [TestCase]
+        public void Recursion_SubclassArray_Test()
+        {
+            var node = new DictionaryNode();
+            var subNode = new ArrayNode();
+            node.Add("ArraySameType", subNode);
+            var res = _deserializer.Deserialize<ClassWithArraySameType>(node);
+            Assert.IsNotNull(res.ArraySameType);
+        }
+
+        [TestCase]
+        public void Recursion_Subclass_Test()
+        {
+            var node = new DictionaryNode();
+            var subNode = new ArrayNode();
+            node.Add("SameClass", subNode);
+            var res = _deserializer.Deserialize<ClassWithClassSameType>(node);
+            Assert.IsNotNull(res.SameClass);
+        }
+
         [TestCase(42)]
         [TestCase(-13423)]
         [TestCase(0)]

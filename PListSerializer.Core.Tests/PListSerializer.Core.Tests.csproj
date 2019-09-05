@@ -55,8 +55,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassWithClassSameType.cs" />
     <Compile Include="TestsModels\AdjustmentLayer.cs" />
+    <Compile Include="TestsModels\ClassWithArray.cs" />
+    <Compile Include="TestsModels\ClassWithArraySameType.cs" />
+    <Compile Include="TestsModels\ClassWithDictionary.cs" />
     <Compile Include="TestsModels\EffectsPlist.cs" />
+    <Compile Include="TestsModels\EmptyClass.cs" />
     <Compile Include="TestsModels\Plist.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
