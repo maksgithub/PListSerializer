@@ -106,12 +106,6 @@ namespace PListSerializer.Core.Tests
             Assert.IsNotNull(r.AdjustmentLayers);
             Assert.IsNotNull(r.AdjustmentLayers[0]);
             Assert.AreEqual("Normal", r.AdjustmentLayers[0].BlendModeIdentifier);
-
-            //Assert.IsNotNull(r.question1);C:\Users\MARS\source\repos\PListSerializer\PListSerializer.Core.Tests\packages.config
-            //Assert.AreEqual("4242422", r.question1.text);
-            //Assert.AreEqual("4242422", r.question1.text2);
-            //Assert.AreEqual("4242422", r.question1.text3);
-            //Assert.AreEqual("4242422", r.question1.text4);
         }
     }
 

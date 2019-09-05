@@ -50,7 +50,7 @@
     <Compile Include="Converters\IPlistConverter.cs" />
     <Compile Include="Converters\ObjectConverter.cs" />
     <Compile Include="Deserializer.cs" />
-    <Compile Include="Extensions\PlistExtensions.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Converters\PrimitiveConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

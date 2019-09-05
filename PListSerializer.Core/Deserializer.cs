@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using PListNet;
-using PListNet.Nodes;
 using PListSerializer.Core.Converters;
 using PListSerializer.Core.Extensions;
 
@@ -30,42 +24,18 @@ namespace PListSerializer.Core
                 {typeof(DateTime), new PrimitiveConverter<DateTime>()},
             };
         }
-        public T Deserialize1<T>(PNode node) where T : class, new()
-        {
-            var constructor = typeof(T).GetConstructor(Array.Empty<Type>());
-            var r = Expression.Lambda<Func<T>>(Expression.New(constructor)).Compile();
-            var deserialize = r();
-            var s = typeof(T).Name;
-            var dNode = node.GetValue<DictionaryNode>(s);
-            foreach (var prop in deserialize.GetType().GetProperties())
-            {
-                var p = dNode.GetValue<string>(prop.Name);
-                prop.SetValue(deserialize, p);
-            }
 
-            return deserialize;
-        }
         public TOut Deserialize<TOut>(PNode source)
         {
             var outType = typeof(TOut);
             var converter = GetOrBuildConverter(outType);
-            // using (var tokenizer = new JsonTokenizer(source, _buffer))
-            {
-                // if (outType.IsPrimitive || outType == typeof(string)) tokenizer.MoveNext();
-
-                var typedConverter = (IPlistConverter<TOut>)converter;
-                return typedConverter.Deserialize(source);
-            }
+            var typedConverter = (IPlistConverter<TOut>)converter;
+            return typedConverter.Deserialize(source);
         }
 
         private IPlistConverter GetOrBuildConverter(Type type)
         {
-            if (_converters.TryGetValue(type, out var exists)) return exists;
-
-            var converter = BuildConverter(type);
-            _converters.Add(type, converter);
-
-            return converter;
+            return _converters.GetOrAdd(type, () => BuildConverter(type));
         }
 
         private IPlistConverter BuildConverter(Type type)
@@ -79,15 +49,17 @@ namespace PListSerializer.Core
                 return (IPlistConverter)Activator.CreateInstance(arrayConverterType, arrayElementConverter);
             }
 
-            var properties = type.GetProperties().ToList();
-            Dictionary<PropertyInfo, IPlistConverter> objectPropertyConverters = properties
-                .Where(x => x.PropertyType != type)
+            var properties = type.GetProperties();
+
+            var propertyInfo = properties.FirstOrDefault(x => x.PropertyType == type);
+            var objectPropertyConverters = properties
+                .Where(x => x != propertyInfo)
                 .ToDictionary(p => p, p => GetOrBuildConverter(p.PropertyType));
 
-            PropertyInfo p1 = properties.FirstOrDefault(x => x.PropertyType == type);
-            Type objectConverterType = typeof(ObjectConverter<>).MakeGenericType(type);
-            IPlistConverter plistConverter = (IPlistConverter)Activator
-                .CreateInstance(objectConverterType, objectPropertyConverters, p1);
+            var objectConverterType = typeof(ObjectConverter<>).MakeGenericType(type);
+            var plistConverter = (IPlistConverter)Activator
+                .CreateInstance(objectConverterType, objectPropertyConverters, propertyInfo);
+
             return plistConverter;
         }
     }

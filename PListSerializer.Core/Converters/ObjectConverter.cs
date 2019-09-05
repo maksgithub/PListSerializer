@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using PListNet;
 using PListNet.Nodes;
 
@@ -12,11 +11,9 @@ namespace PListSerializer.Core.Converters
     public class ObjectConverter<TObject> : IPlistConverter<TObject>
     {
         private readonly Func<TObject> _activator;
-        private readonly EqualityComparer<TObject> _equalityComparer;
         private readonly Dictionary<string, Action<TObject, PNode>> _deserializeMethods;
 
-        public ObjectConverter(Dictionary<PropertyInfo, 
-            IPlistConverter> propertyConverters, PropertyInfo p)
+        public ObjectConverter(Dictionary<PropertyInfo, IPlistConverter> propertyConverters, PropertyInfo propertyInfo)
         {
             var outInstanceConstructor = typeof(TObject).GetConstructor(Array.Empty<Type>());
 
@@ -28,36 +25,28 @@ namespace PListSerializer.Core.Converters
                 pair => pair.Key.Name,
                 pair => BuildDeserializeMethod(pair.Key, pair.Value));
 
-            if (p != null)
+            if (propertyInfo != null)
             {
-                _deserializeMethods.Add(p.Name, BuildDeserializeMethod(p, this));
+                _deserializeMethods.Add(propertyInfo.Name, BuildDeserializeMethod(propertyInfo, this));
             }
-            _equalityComparer = EqualityComparer<TObject>.Default;
         }
 
-
-        public void Add()
-        {
-            throw new NotImplementedException();
-        }
-        public void Add(string key, Action<TObject, PNode> value)
-        {
-            _deserializeMethods.Add(key, value);
-        }
         public TObject Deserialize(PNode rootNode)
         {
             var instance = _activator();
             if (rootNode is DictionaryNode dictionaryNode)
-            { 
-                var enumerator = dictionaryNode.GetEnumerator();
-                while (enumerator.MoveNext())
+            {
+                using (var enumerator = dictionaryNode.GetEnumerator())
                 {
-                    var token = enumerator.Current;
-                    var propertyName = token.Key;
-                    if (!_deserializeMethods.TryGetValue(propertyName, out var converter))
-                        continue;
-
-                    converter(instance, token.Value);
+                    while (enumerator.MoveNext())
+                    {
+                        var token = enumerator.Current;
+                        var propertyName = token.Key;
+                        if (_deserializeMethods.TryGetValue(propertyName, out var converter))
+                        {
+                            converter(instance, token.Value);
+                        }
+                    }
                 }
             }
 
@@ -69,8 +58,8 @@ namespace PListSerializer.Core.Converters
         {
             const string deserializeMethodName = nameof(IPlistConverter<object>.Deserialize);
 
-            var instance = Expression.Parameter(typeof(TObject), "instance");
-            var tokenizer = Expression.Parameter(typeof(PNode), "tokenizer");
+            var instance = Expression.Parameter(typeof(TObject));
+            var parameter = Expression.Parameter(typeof(PNode));
 
             var converterType = propertyValueConverter.GetType();
             var deserializeMethod = converterType.GetMethod(deserializeMethodName);
@@ -81,11 +70,11 @@ namespace PListSerializer.Core.Converters
             }
 
             var converter = Expression.Constant(propertyValueConverter, converterType);
-            var propertyValue = Expression.Call(converter, deserializeMethod, tokenizer);
+            var propertyValue = Expression.Call(converter, deserializeMethod, parameter);
 
             var body = Expression.Assign(Expression.Property(instance, property), propertyValue);
             return Expression
-                .Lambda<Action<TObject, PNode>>(body, instance, tokenizer)
+                .Lambda<Action<TObject, PNode>>(body, instance, parameter)
                 .Compile();
         }
     }
