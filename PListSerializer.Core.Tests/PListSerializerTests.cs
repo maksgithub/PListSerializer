@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using PListNet;
 using PListNet.Nodes;
+using PListSerializer.Core.Attributes;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace PListSerializer.Core.Tests
@@ -97,25 +98,34 @@ namespace PListSerializer.Core.Tests
             var stream = new MemoryStream(byteArray);
             var node = PList.Load(stream);
             var d = new Deserializer();
-            var r = d.Deserialize<plist>(node);
+            var r = d.Deserialize<Plist>(node);
             Assert.IsNotNull(r);
-            Assert.AreEqual("Custom", r.group_identifier);
-            Assert.AreEqual("Clarity Booster - 2018.lmp", r.kMPPresetIdentifierKey);
+            Assert.AreEqual("Custom", r.GroupIdentifier);
+            Assert.AreEqual("Clarity Booster - 2018.lmp", r.PresetIdentifierKey);
             Assert.AreEqual(true, r.Hidden);
-            Assert.AreEqual("259F230F-A18A-489C-87FE-024B503E1F5C", r.uuid);
+            Assert.AreEqual("259F230F-A18A-489C-87FE-024B503E1F5C", r.Id);
             Assert.IsNotNull(r.AdjustmentLayers);
             Assert.IsNotNull(r.AdjustmentLayers[0]);
             Assert.AreEqual("Normal", r.AdjustmentLayers[0].BlendModeIdentifier);
         }
     }
 
-    public class plist
+    public class Plist
     {
-        public string group_identifier { get; set; }
-        public string kMPPresetIdentifierKey { get; set; }
-        public int priority { get; set; }
+        [PlistName("group_identifier")]
+        public string GroupIdentifier { get; set; }
+
+        [PlistName("kMPPresetIdentifierKey")]
+        public string PresetIdentifierKey { get; set; }
+
+        [PlistName("priority")]
+        public int Priority { get; set; }
+
         public bool Hidden { get; set; }
-        public string uuid { get; set; }
+
+        [PlistName("uuid")]
+        public string Id { get; set; }
+
         public AdjustmentLayer[] AdjustmentLayers { get; set; }
     }
 

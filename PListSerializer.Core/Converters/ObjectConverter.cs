@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using PListNet;
 using PListNet.Nodes;
+using PListSerializer.Core.Extensions;
 
 namespace PListSerializer.Core.Converters
 {
@@ -22,7 +23,7 @@ namespace PListSerializer.Core.Converters
                 : Expression.Lambda<Func<TObject>>(Expression.New(outInstanceConstructor)).Compile();
 
             _deserializeMethods = propertyConverters.ToDictionary(
-                pair => pair.Key.Name,
+                pair => pair.Key.GetName(),
                 pair => BuildDeserializeMethod(pair.Key, pair.Value));
 
             if (propertyInfo != null)

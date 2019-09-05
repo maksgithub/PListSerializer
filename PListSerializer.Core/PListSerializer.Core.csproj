@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\PlistNameAttribute.cs" />
     <Compile Include="Converters\ArrayConverter.cs" />
     <Compile Include="Converters\IntegerConverter.cs" />
     <Compile Include="Converters\IPlistConverter.cs" />
@@ -52,10 +53,12 @@
     <Compile Include="Deserializer.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Converters\PrimitiveConverter.cs" />
+    <Compile Include="Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
