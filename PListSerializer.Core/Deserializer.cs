@@ -59,8 +59,8 @@ namespace PListSerializer.Core
             if (IsDictionary(type))
             {
                 var arrayElementType = type.GenericTypeArguments;
-                var keyConverter = GetOrBuildConverter(arrayElementType[0]);
-                var valueConverter = GetOrBuildConverter(arrayElementType[1]);
+                var keyConverter = CreateObjectConverter(arrayElementType[0]);
+                var valueConverter = CreateObjectConverter(arrayElementType[1]);
 
                 var dictionaryConverterType = typeof(DictionaryConverter<>).MakeGenericType(arrayElementType[1]);
                 return (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, valueConverter);
@@ -69,15 +69,22 @@ namespace PListSerializer.Core
             if (type.IsArray)
             {
                 Type arrayElementType = type.GetElementType();
-                var arrayElementConverter = GetOrBuildConverter(arrayElementType);
+                var arrayElementConverter = CreateObjectConverter(arrayElementType);
 
                 var arrayConverterType = typeof(ArrayConverter<>).MakeGenericType(arrayElementType);
                 return (IPlistConverter)Activator.CreateInstance(arrayConverterType, arrayElementConverter);
             }
 
+            var plistConverter = CreateObjectConverter(type);
+
+            return plistConverter;
+        }
+
+        private IPlistConverter CreateObjectConverter(Type type)
+        {
             var properties = type.GetProperties();
 
-            var propertyInfo = properties.FirstOrDefault(x => x.PropertyType == type);
+            var propertyInfo = properties.FirstOrDefault(x => x.PropertyType == type || x.PropertyType.GetGenericTypeDefinition() == t);
             var propertyInfos = properties
                 .Where(x => x != propertyInfo)
                 //.Where(x => !x.PropertyType.IsGenericType)
@@ -87,9 +94,8 @@ namespace PListSerializer.Core
                 .ToDictionary(p => p, p => GetOrBuildConverter(p.PropertyType));
 
             var objectConverterType = typeof(ObjectConverter<>).MakeGenericType(type);
-            var plistConverter = (IPlistConverter)Activator
+            var plistConverter = (IPlistConverter) Activator
                 .CreateInstance(objectConverterType, objectPropertyConverters, propertyInfo);
-
             return plistConverter;
         }
     }
