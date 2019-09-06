@@ -2,6 +2,7 @@
 {
     public class ClassWithArraySameType
     {
+        public string Id { get; set; }
         public ClassWithArraySameType[] ArraySameType { get; set; }
     }
 }

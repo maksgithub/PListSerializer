@@ -14,12 +14,10 @@ namespace PListSerializer.Core.Tests
     [TestClass]
     public class PListSerializerTests
     {
-        private Deserializer _deserializer;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            _deserializer = new Deserializer();
         }
 
         [TestCase]
@@ -28,6 +26,7 @@ namespace PListSerializer.Core.Tests
             var node = new DictionaryNode();
             var subNode = new ArrayNode();
             node.Add("Array", subNode);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<ClassWithArray>(node);
             Assert.IsNotNull(res.Array);
         }
@@ -38,6 +37,7 @@ namespace PListSerializer.Core.Tests
             var node = new DictionaryNode();
             var subNode = new DictionaryNode();
             node.Add("Dictionary", subNode);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<ClassWithDictionary>(node);
             Assert.IsNotNull(res.Dictionary);
         }
@@ -48,8 +48,33 @@ namespace PListSerializer.Core.Tests
             var node = new DictionaryNode();
             var subNode = new ArrayNode();
             node.Add("ArraySameType", subNode);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<ClassWithArraySameType>(node);
             Assert.IsNotNull(res.ArraySameType);
+        }
+
+        [TestCase]
+        public void Recursion_Deep_SubclassArray_Test()
+        {
+            var byteArray = Encoding.ASCII.GetBytes(Resources.PList4);
+            var stream = new MemoryStream(byteArray);
+            var node = PList.Load(stream);
+            var d = new Deserializer();
+            var res = d.Deserialize<ClassWithArraySameType>(node);
+            Assert.IsNotNull(res.ArraySameType);
+            Assert.AreEqual("0", res.ArraySameType[0].Id);
+            Assert.AreEqual("1", res.ArraySameType[1].Id);
+            Assert.AreEqual("2", res.ArraySameType[2].Id);
+            Assert.AreEqual("3", res.ArraySameType[3].Id);
+            Assert.AreEqual("4", res.ArraySameType[4].Id);
+            Assert.AreEqual("5", res.ArraySameType[5].Id);
+
+            Assert.AreEqual("00", res.ArraySameType[0].ArraySameType[0].Id);
+            Assert.AreEqual("01", res.ArraySameType[0].ArraySameType[1].Id);
+            Assert.AreEqual("000", res.ArraySameType[0].ArraySameType[0].ArraySameType[0].Id);
+            Assert.AreEqual("001", res.ArraySameType[0].ArraySameType[0].ArraySameType[1].Id);
+
+            //Assert.IsNotNull(res.ArraySameType[0].ArraySameType);
         }
 
         [TestCase]
@@ -58,6 +83,7 @@ namespace PListSerializer.Core.Tests
             var node = new DictionaryNode();
             var subNode = new ArrayNode();
             node.Add("SameClass", subNode);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<ClassWithClassSameType>(node);
             Assert.IsNotNull(res.SameClass);
         }
@@ -68,6 +94,7 @@ namespace PListSerializer.Core.Tests
             var node = new DictionaryNode();
             var subNode = new DictionaryNode();
             node.Add("DictionarySameType", subNode);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<ClassWithDictionarySameType>(node);
             Assert.IsNotNull(res.DictionarySameType);
         }
@@ -78,6 +105,7 @@ namespace PListSerializer.Core.Tests
         public void Deserialize_Int_Test(int source)
         {
             var node = new IntegerNode(source);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<int>(node);
             Assert.IsInstanceOfType(res, typeof(int));
             Assert.AreEqual(source, res);
@@ -89,6 +117,7 @@ namespace PListSerializer.Core.Tests
         public void Deserialize_Long_Test(long source)
         {
             var node = new IntegerNode(source);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<long>(node);
             Assert.IsInstanceOfType(res, typeof(long));
             Assert.AreEqual(source, res);
@@ -99,6 +128,7 @@ namespace PListSerializer.Core.Tests
         public void Deserialize_Bool_Test(bool source)
         {
             var node = new BooleanNode(source);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<bool>(node);
             Assert.IsInstanceOfType(res, typeof(bool));
             Assert.AreEqual(source, res);
@@ -109,6 +139,7 @@ namespace PListSerializer.Core.Tests
         public void Deserialize_String_Test(string source)
         {
             var node = new StringNode(source);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<string>(node);
             Assert.IsInstanceOfType(res, typeof(string));
             Assert.AreEqual(source, res);
@@ -118,6 +149,7 @@ namespace PListSerializer.Core.Tests
         {
             DateTime source = DateTime.MaxValue;
             var node = new DateNode(source);
+            var _deserializer = new Deserializer();
             var res = _deserializer.Deserialize<DateTime>(node);
             Assert.IsInstanceOfType(res, typeof(DateTime));
             Assert.AreEqual(source, res);
@@ -174,7 +206,7 @@ namespace PListSerializer.Core.Tests
             //Assert.AreEqual("raw_dev2", adjustmentLayer.InfoImageName);
             //Assert.AreEqual("DevelopAdjustmentLayer", adjustmentLayer.Identifier);
             Assert.IsNotNull(adjustmentLayer.Sublayers);
-            Assert.AreEqual(4, adjustmentLayer.Sublayers.Length);
+            Assert.AreEqual(3, adjustmentLayer.Sublayers.Length);
             //Assert.IsNotNull("LensCorrection", adjustmentLayer.Sublayers[0].EffectsIMG);
         }
     }

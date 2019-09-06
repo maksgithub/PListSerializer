@@ -74,6 +74,7 @@
     <Content Include="Resources\Plist2.txt" />
     <Compile Include="TestObjects\question.cs" />
     <Content Include="Resources\Plist3.txt" />
+    <Content Include="Resources\PList4.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
