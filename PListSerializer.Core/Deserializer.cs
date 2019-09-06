@@ -39,24 +39,9 @@ namespace PListSerializer.Core
             return _converters.GetOrAdd(type, () => BuildConverter(type));
         }
 
-        public bool IsList(Type type)
-        {
-            if (type == null) return false;
-            return
-                   type.IsGenericType &&
-                   type.GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>));
-        }
-
-        public bool IsDictionary(Type type)
-        {
-            if (type == null) return false;
-            return type.IsGenericType &&
-                   type.GetGenericTypeDefinition().IsAssignableFrom(typeof(Dictionary<,>));
-        }
-
         private IPlistConverter BuildConverter(Type type)
         {
-            if (IsDictionary(type))
+            if (type.IsDictionary())
             {
                 var arrayElementType = type.GenericTypeArguments;
                 var keyConverter = GetOrBuildConverter(arrayElementType[0]);
@@ -86,6 +71,15 @@ namespace PListSerializer.Core
                     var b = elementType == type;
                     var b1 = x.PropertyType.IsArray && b;
                     return !b1;
+                })
+                .Where(x =>
+                {
+                    if (x.IsDictionary())
+                    {
+                        var t = x.PropertyType.GenericTypeArguments.FirstOrDefault(x2 => x2 == type);
+                        return t == null;
+                    }
+                    return true;
                 })
                 .ToList();
 

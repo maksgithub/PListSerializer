@@ -20,5 +20,25 @@ namespace PListSerializer.Core.Extensions
 
             return result?.Description ?? propertyInfo?.Name;
         }
+
+        public static bool IsList(this Type type)
+        {
+            if (type == null) return false;
+            return
+                type.IsGenericType &&
+                type.GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>));
+        }
+
+        public static bool IsDictionary(this Type type)
+        {
+            if (type == null) return false;
+            return type.IsGenericType &&
+                   type.GetGenericTypeDefinition().IsAssignableFrom(typeof(Dictionary<,>));
+        }
+
+        public static bool IsDictionary(this PropertyInfo property)
+        {
+            return property.PropertyType.IsDictionary();
+        }
     }
 }

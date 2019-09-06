@@ -40,6 +40,16 @@ namespace PListSerializer.Core.Converters
                     var dictionaryConverterType = typeof(ArrayConverter<>).MakeGenericType(elementType);
                     IPlistConverter conv = (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, this);
                     _deserializeMethods.Add(elementProperty.Name, BuildDeserializeMethod(elementProperty, conv));
+                    return;
+                }
+
+                var d = type.GetProperties().FirstOrDefault(x => x.IsDictionary());
+                var t = d?.PropertyType.GenericTypeArguments.FirstOrDefault(x => x == type);
+                if (t!= null)
+                {
+                    var dictionaryConverterType = typeof(DictionaryConverter<>).MakeGenericType(t);
+                    var con = (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, this);
+                    _deserializeMethods.Add(d.Name, BuildDeserializeMethod(d, con));
                 }
             }
         }
