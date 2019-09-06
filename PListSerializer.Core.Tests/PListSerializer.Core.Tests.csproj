@@ -60,6 +60,7 @@
     <Compile Include="TestsModels\ClassWithArray.cs" />
     <Compile Include="TestsModels\ClassWithArraySameType.cs" />
     <Compile Include="TestsModels\ClassWithDictionary.cs" />
+    <Compile Include="TestsModels\ClassWithDictionarySameType.cs" />
     <Compile Include="TestsModels\EffectsPlist.cs" />
     <Compile Include="TestsModels\EmptyClass.cs" />
     <Compile Include="TestsModels\Plist.cs" />

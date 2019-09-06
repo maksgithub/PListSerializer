@@ -80,7 +80,13 @@ namespace PListSerializer.Core
             var propertyInfo = properties.FirstOrDefault(x => x.PropertyType == type);
             var propertyInfos = properties
                 .Where(x => x != propertyInfo)
-                //.Where(x => !x.PropertyType.IsGenericType)
+                .Where(x =>
+                {
+                    var elementType = x.PropertyType.GetElementType();
+                    var b = elementType == type;
+                    var b1 = x.PropertyType.IsArray && b;
+                    return !b1;
+                })
                 .ToList();
 
             var objectPropertyConverters = propertyInfos

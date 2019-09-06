@@ -62,6 +62,16 @@ namespace PListSerializer.Core.Tests
             Assert.IsNotNull(res.SameClass);
         }
 
+        [TestCase]
+        public void Recursion_SubclassDictionary_Test()
+        {
+            var node = new DictionaryNode();
+            var subNode = new DictionaryNode();
+            node.Add("DictionarySameType", subNode);
+            var res = _deserializer.Deserialize<ClassWithDictionarySameType>(node);
+            Assert.IsNotNull(res.DictionarySameType);
+        }
+
         [TestCase(42)]
         [TestCase(-13423)]
         [TestCase(0)]
@@ -132,7 +142,7 @@ namespace PListSerializer.Core.Tests
         }
 
         [TestCase]
-        public void Serialize_Effect_Test()
+        public void Deserialize_Effect_Test()
         {
             var byteArray = Encoding.ASCII.GetBytes(Resources.Plist2);
             var stream = new MemoryStream(byteArray);

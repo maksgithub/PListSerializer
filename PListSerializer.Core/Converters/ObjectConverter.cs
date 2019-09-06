@@ -30,6 +30,18 @@ namespace PListSerializer.Core.Converters
             {
                 _deserializeMethods.Add(propertyInfo.Name, BuildDeserializeMethod(propertyInfo, this));
             }
+            else
+            {
+                var type = typeof(TObject);
+                var elementProperty = type.GetProperties().FirstOrDefault(x => x.PropertyType.IsArray);
+                var elementType = elementProperty?.PropertyType.GetElementType();
+                if (elementType != null && type == elementType)
+                {
+                    var dictionaryConverterType = typeof(ArrayConverter<>).MakeGenericType(elementType);
+                    IPlistConverter conv = (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, this);
+                    _deserializeMethods.Add(elementProperty.Name, BuildDeserializeMethod(elementProperty, conv));
+                }
+            }
         }
 
         public TObject Deserialize(PNode rootNode)
