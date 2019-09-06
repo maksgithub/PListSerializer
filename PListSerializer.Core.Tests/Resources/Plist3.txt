@@ -565,6 +565,162 @@
             <string>DevelopAdjustmentSubLayer</string>
             <key>InfoArray</key>
             <array/>
+            <key>Sublayers</key>
+            <array>
+              <dict>
+                <key>InfoImageName</key>
+                <string>blacks_whites</string>
+                <key>Effects</key>
+                <array>
+                  <dict>
+                    <key>Identifier</key>
+                    <string>MIPLBlackWhiteEffect</string>
+                    <key>Parameters</key>
+                    <dict>
+                      <key>Whites</key>
+                      <dict>
+                        <key>ValueFill</key>
+                        <false/>
+                        <key>GradientColors</key>
+                        <dict>
+                          <key>Default</key>
+                          <array>
+                            <string>#404243</string>
+                            <string>#C3C3C3</string>
+                          </array>
+                        </dict>
+                      </dict>
+                      <key>Blacks</key>
+                      <dict>
+                        <key>ValueFill</key>
+                        <false/>
+                        <key>GradientColors</key>
+                        <dict>
+                          <key>Default</key>
+                          <array>
+                            <string>#404243</string>
+                            <string>#C3C3C3</string>
+                          </array>
+                        </dict>
+                      </dict>
+                    </dict>
+                    <key>AdvancedGroups</key>
+                    <array>
+                      <dict>
+                        <key>Parameters</key>
+                        <array>
+                          <string>Whites</string>
+                          <string>Blacks</string>
+                        </array>
+                      </dict>
+                    </array>
+                  </dict>
+                </array>
+                <key>Identifier</key>
+                <string>BlacksWhitesEffectSubLayer</string>
+                <key>InfoArray</key>
+                <array/>
+                <key>InfoDescription</key>
+                <string>Whites / Blacks will set black and white points of the image histogram - very darkest and very brightest parts of your image. You can boost or fine-tune image contrast with this filter. Also, this filter can be used for some creative looks.</string>
+                <key>Name</key>
+                <string>Develop</string>
+                <key>NameRAW</key>
+                <string>RAW Develop</string>
+              </dict>
+              <dict>
+                <key>InfoImageName</key>
+                <string>clarity</string>
+                <key>Effects</key>
+                <array>
+                  <dict>
+                    <key>Identifier</key>
+                    <string>MIPLClarityEffect</string>
+                    <key>Parameters</key>
+                    <dict>
+                      <key>Clarity</key>
+                      <dict>
+                        <key>Hidden</key>
+                        <true/>
+                        <key>Name</key>
+                        <string>Clarity</string>
+                      </dict>
+                    </dict>
+                  </dict>
+                </array>
+                <key>Identifier</key>
+                <string>ClarityLayerSubLayer</string>
+                <key>InfoArray</key>
+                <array/>
+                <key>InfoDescription</key>
+                <string>Increases local contrast along the edges of the mid-tones of your photo. It’s a subtle way to improve the details found in your image.</string>
+                <key>Name</key>
+                <string>Develop</string>
+                <key>NameRAW</key>
+                <string>RAW Develop</string>
+              </dict>
+              <dict>
+                <key>InfoImageName</key>
+                <string>curves</string>
+                <key>Effects</key>
+                <array>
+                  <dict>
+                    <key>Identifier</key>
+                    <string>MIPLCurveEffect</string>
+                    <key>Parameters</key>
+                    <dict>
+                      <key>R</key>
+                      <dict>
+                        <key>Name</key>
+                        <string>Red</string>
+                        <key>HistorySuffix</key>
+                        <string>: Curve Modified</string>
+                      </dict>
+                      <key>G</key>
+                      <dict>
+                        <key>Name</key>
+                        <string>Green</string>
+                        <key>HistorySuffix</key>
+                        <string>: Curve Modified</string>
+                      </dict>
+                      <key>B</key>
+                      <dict>
+                        <key>Name</key>
+                        <string>Blue</string>
+                        <key>HistorySuffix</key>
+                        <string>: Curve Modified</string>
+                      </dict>
+                      <key>RGB</key>
+                      <dict>
+                        <key>Name</key>
+                        <string>RGB</string>
+                        <key>HistorySuffix</key>
+                        <string>: Curve Modified</string>
+                      </dict>
+                    </dict>
+                    <key>AdvancedGroups</key>
+                    <array>
+                      <dict>
+                        <key>Parameters</key>
+                        <array>
+                          <string>RGB</string>
+                          <string>R</string>
+                          <string>G</string>
+                          <string>B</string>
+                        </array>
+                      </dict>
+                    </array>
+                  </dict>
+                </array>
+                <key>Identifier</key>
+                <string>CurveLayer</string>
+                <key>InfoArray</key>
+                <array/>
+                <key>InfoDescription</key>
+                <string>One of the most powerful tools for adjusting tones to brighten, darken, add contrast and shift colors. Curves can usually be applied to all channels together in an image, or to each channel individually.</string>
+                <key>Name</key>
+                <string>Curves</string>
+              </dict>
+            </array>
             <key>Name</key>
             <string>Light</string>
             <key>InfoDescription</key>
