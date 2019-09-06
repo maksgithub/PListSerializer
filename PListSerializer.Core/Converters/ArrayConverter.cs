@@ -12,7 +12,7 @@ namespace PListSerializer.Core.Converters
         public ArrayConverter(IPlistConverter<TElement> elementConverter)
         {
             _elementConverter = elementConverter;
-            _buffer = new List<TElement>(10);
+            _buffer = new List<TElement>(100);
         }
 
         public TElement[] Deserialize(PNode rootNode)

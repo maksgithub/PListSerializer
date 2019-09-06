@@ -31,7 +31,8 @@ namespace PListSerializer.Core
             var outType = typeof(TOut);
             var converter = GetOrBuildConverter(outType);
             var typedConverter = (IPlistConverter<TOut>)converter;
-            return typedConverter.Deserialize(source);
+            var deserialize = typedConverter.Deserialize(source);
+            return deserialize;
         }
 
         private IPlistConverter GetOrBuildConverter(Type type)

@@ -4,10 +4,16 @@ namespace PListSerializer.Core.Tests.TestsModels
 {
     public class AdjustmentLayer
     {
-        public string BlendModeIdentifier { get; set; }
+        //public string BlendModeIdentifier { get; set; }
 
-        public string InfoImageName { get; set; }
+        //public string InfoImageName { get; set; }
         public string Identifier { get; set; }
-        //public AdjustmentLayer[] Sublayers { get; set; }
+        public AdjustmentLayer[] Sublayers { get; set; }
+
+        //public Effect[] EffectsIMG { get; set; }
+    }
+
+    public class Effect
+    {
     }
 }
