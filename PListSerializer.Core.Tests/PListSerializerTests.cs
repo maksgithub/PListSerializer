@@ -44,9 +44,12 @@ namespace PListSerializer.Core.Tests
         {
             var node = new DictionaryNode();
             var subNode = new ArrayNode();
+            var subNode2 = new ArrayNode();
             node.Add("ArraySameType", subNode);
+            node.Add("ArraySameType2", subNode2);
             var res = _deserializer.Deserialize<ClassWithArraySameType>(node);
             Assert.IsNotNull(res.ArraySameType);
+            Assert.IsNotNull(res.ArraySameType2);
         }
 
         [TestCase]
