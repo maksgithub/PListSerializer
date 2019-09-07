@@ -169,23 +169,50 @@ namespace PListSerializer.Core.Tests {
         ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
         ///&lt;plist version=&quot;1.0&quot;&gt;
         ///  &lt;dict&gt;
-        ///    &lt;key&gt;ArraySameType1&lt;/key&gt;
+        ///    &lt;key&gt;DictionaryArrays&lt;/key&gt;
         ///    &lt;dict&gt;
-        ///      &lt;key&gt;ArraySameType&lt;/key&gt;
-        ///      &lt;array&gt;
-        ///        &lt;dict&gt;
-        ///          &lt;key&gt;Id&lt;/key&gt;
-        ///          &lt;string&gt;0&lt;/string&gt;
-        ///          &lt;key&gt;ArraySameType&lt;/key&gt;
-        ///          &lt;array&gt;
-        ///            &lt;dict&gt;
-        ///              &lt;key&gt;Id&lt;/key&gt;
-        ///              &lt;string&gt;00&lt;/string&gt;
-        ///              &lt;key&gt;ArraySameType&lt;/k [rest of string was truncated]&quot;;.
+        ///      &lt;key&gt;Arrays1&lt;/key&gt;
+        ///      &lt;dict&gt;
+        ///        &lt;key&gt;Id&lt;/key&gt;
+        ///        &lt;string&gt;-1&lt;/string&gt;
+        ///        &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///        &lt;array&gt;
+        ///          &lt;dict&gt;
+        ///            &lt;key&gt;Id&lt;/key&gt;
+        ///            &lt;string&gt;0&lt;/string&gt;
+        ///            &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///            &lt;array&gt;
+        ///            [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PList5 {
             get {
                 return ResourceManager.GetString("PList5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+        ///&lt;plist version=&quot;1.0&quot;&gt;
+        ///  &lt;dict&gt;
+        ///    &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///    &lt;array&gt;
+        ///      &lt;dict&gt;
+        ///        &lt;key&gt;Id&lt;/key&gt;
+        ///        &lt;string&gt;0&lt;/string&gt;
+        ///        &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///        &lt;array&gt;
+        ///          &lt;dict&gt;
+        ///            &lt;key&gt;Id&lt;/key&gt;
+        ///            &lt;string&gt;00&lt;/string&gt;
+        ///            &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///            &lt;array&gt;
+        ///              &lt;dict&gt;
+        ///                &lt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PList6 {
+            get {
+                return ResourceManager.GetString("PList6", resourceCulture);
             }
         }
     }

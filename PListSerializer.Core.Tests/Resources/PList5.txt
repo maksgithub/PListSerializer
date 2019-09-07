@@ -67,48 +67,17 @@
           <dict>
             <key>Id</key>
             <string>0</string>
-            <key>ArraySameType</key>
-            <array>
-              <dict>
-                <key>Id</key>
-                <string>00</string>
-                <key>ArraySameType</key>
-                <array>
-                  <dict>
-                    <key>Id</key>
-                    <string>000</string>
-                  </dict>
-                  <dict>
-                    <key>Id</key>
-                    <string>001</string>
-                  </dict>
-                </array>
-              </dict>
-              <dict>
-                <key>Id</key>
-                <string>01</string>
-              </dict>
-            </array>
           </dict>
           <dict>
             <key>Id</key>
             <string>1</string>
-          </dict>
-          <dict>
-            <key>Id</key>
-            <string>2</string>
-          </dict>
-          <dict>
-            <key>Id</key>
-            <string>3</string>
-          </dict>
-          <dict>
-            <key>Id</key>
-            <string>4</string>
-          </dict>
-          <dict>
-            <key>Id</key>
-            <string>5</string>
+            <key>ArraySameType</key>
+            <array>
+              <dict>
+                <key>Id</key>
+                <string>10</string>
+              </dict>
+            </array>
           </dict>
         </array>
       </dict>
