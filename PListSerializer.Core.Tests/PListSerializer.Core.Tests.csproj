@@ -63,6 +63,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Content Include="Resources\Effects.txt" />
+    <Compile Include="TestsModels\Effects\Parameter.cs" />
+    <Compile Include="TestsModels\Effects\Root.cs" />
     <Compile Include="TestsModels\ClassWithClassSameType.cs" />
     <Compile Include="TestsModels\Effects\Effect.cs" />
     <Compile Include="TestsModels\Effects\Layer.cs" />
@@ -73,7 +75,7 @@
     <Compile Include="TestsModels\ClassWithDictionarySameType.cs" />
     <Compile Include="TestsModels\EffectsPlist.cs" />
     <Compile Include="TestsModels\EmptyClass.cs" />
-    <Compile Include="TestsModels\Plist.cs" />
+    <Compile Include="TestsModels\RootPList.cs" />
     <Compile Include="PListSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Resources\Plist2.txt" />

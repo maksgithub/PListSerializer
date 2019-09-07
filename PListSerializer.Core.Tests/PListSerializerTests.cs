@@ -143,7 +143,7 @@ namespace PListSerializer.Core.Tests
             var byteArray = Encoding.ASCII.GetBytes(Resources.Plist2);
             var stream = new MemoryStream(byteArray);
             var node = PList.Load(stream);
-            var r = _deserializer.Deserialize<Plist>(node);
+            var r = _deserializer.Deserialize<RootPList>(node);
             Assert.IsNotNull(r);
             Assert.AreEqual("Custom", r.GroupIdentifier);
             Assert.AreEqual("Clarity Booster - 2018.lmp", r.PresetIdentifierKey);

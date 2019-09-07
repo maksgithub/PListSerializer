@@ -3,7 +3,7 @@ using PListSerializer.Core.Tests.TestsModels.Effects;
 
 namespace PListSerializer.Core.Tests.TestsModels
 {
-    public class Plist
+    public class RootPList
     {
         [PlistName("group_identifier")]
         public string GroupIdentifier { get; set; }
@@ -19,6 +19,7 @@ namespace PListSerializer.Core.Tests.TestsModels
         [PlistName("uuid")]
         public string Id { get; set; }
 
+        [PlistName("AdjustmentLayers")]
         public Layer[] AdjustmentLayers { get; set; }
     }
 }

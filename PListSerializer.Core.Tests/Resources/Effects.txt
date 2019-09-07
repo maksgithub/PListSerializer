@@ -37,7 +37,7 @@
 			<key>InfoDescription</key>
 			<string>Smart enhancement with the help of Artificial Intelligence. This filter automatically analyzes your image, and makes the necessary adjustments to bring naturally beautiful results.</string>
 			<key>Name</key>
-			<string>Accent AI Filterâ„¢</string>
+			<string>Accent AI Filter</string>
 		</dict>
 		<key>SkyEnhancerAdjustmentLayer</key>
 		<dict>
