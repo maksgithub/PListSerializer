@@ -1,4 +1,5 @@
 ﻿using PListSerializer.Core.Attributes;
+using PListSerializer.Core.Tests.TestsModels.Effects;
 
 namespace PListSerializer.Core.Tests.TestsModels
 {
@@ -18,6 +19,6 @@ namespace PListSerializer.Core.Tests.TestsModels
         [PlistName("uuid")]
         public string Id { get; set; }
 
-        public AdjustmentLayer[] AdjustmentLayers { get; set; }
+        public Layer[] AdjustmentLayers { get; set; }
     }
 }

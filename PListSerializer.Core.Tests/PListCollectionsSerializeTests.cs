@@ -32,7 +32,7 @@ namespace PListSerializer.Core.Tests
             Assert.AreEqual("001", res.ArraySameType[0].ArraySameType[0].ArraySameType[1].Id);
         }
 
-        //[TestCase]
+        [TestCase]
         public void Recursion_Deep_SubclassDictionaryAndArray_Test()
         {
             var byteArray = Encoding.ASCII.GetBytes(Resources.PList5);
@@ -57,7 +57,7 @@ namespace PListSerializer.Core.Tests
             Assert.AreEqual("01", array1.ArraySameType[0].ArraySameType[1].Id);
             Assert.AreEqual("000", array1.ArraySameType[0].ArraySameType[0].ArraySameType[0].Id);
             Assert.AreEqual("001", array1.ArraySameType[0].ArraySameType[0].ArraySameType[1].Id);
-        
+
             var array2 = root.DictionaryArrays["Arrays2"];
 
             Assert.IsNotNull(array2);
@@ -79,6 +79,9 @@ namespace PListSerializer.Core.Tests
             var res = d.Deserialize<ClassWithArraySameType>(node);
             Assert.IsNotNull(res.ArraySameType);
             Assert.AreEqual("0", res.ArraySameType[0].Id);
-            Assert.AreEqual("1", res.ArraySameType[1].Id);}
+            Assert.AreEqual("1", res.ArraySameType[1].Id);
+            Assert.AreEqual("10", res.ArraySameType[1].ArraySameType[0].Id);
+            Assert.AreEqual("11", res.ArraySameType[1].ArraySameType[1].Id);
+        }
     }
 }

@@ -6,17 +6,16 @@ namespace PListSerializer.Core.Converters
 {
     internal sealed class ArrayConverter<TElement> : IPlistConverter<TElement[]>
     {
-        private readonly List<TElement> _buffer;
         private readonly IPlistConverter<TElement> _elementConverter;
 
         public ArrayConverter(IPlistConverter<TElement> elementConverter)
         {
             _elementConverter = elementConverter;
-            _buffer = new List<TElement>(100);
         }
 
         public TElement[] Deserialize(PNode rootNode)
         {
+            var buffer = new List<TElement>(100);
             if (!(rootNode is ArrayNode arrayNode))
             {
                 return default;
@@ -28,15 +27,13 @@ namespace PListSerializer.Core.Converters
                 {
                     var token = enumerator.Current;
                     var element = _elementConverter.Deserialize(token);
-                    _buffer.Add(element);
+                    buffer.Add(element);
                 }
             }
 
-            var array = new TElement[_buffer.Count];
+            var array = new TElement[buffer.Count];
             for (var i = 0; i < array.Length; i++)
-                array[i] = _buffer[i];
-
-            _buffer.Clear();
+                array[i] = buffer[i];
 
             return array;
         }

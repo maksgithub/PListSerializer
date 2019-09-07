@@ -55,14 +55,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LayerDeserializeTests.cs" />
     <Compile Include="PListCollectionsSerializeTests.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Content Include="Resources\Effects.txt" />
     <Compile Include="TestsModels\ClassWithClassSameType.cs" />
-    <Compile Include="TestsModels\AdjustmentLayer.cs" />
+    <Compile Include="TestsModels\Effects\Effect.cs" />
+    <Compile Include="TestsModels\Effects\Layer.cs" />
     <Compile Include="TestsModels\ClassWithArray.cs" />
     <Compile Include="TestsModels\ClassWithArraySameType.cs" />
     <Compile Include="TestsModels\ClassWithDictionary.cs" />

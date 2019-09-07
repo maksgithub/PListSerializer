@@ -61,6 +61,33 @@ namespace PListSerializer.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+        ///&lt;plist version=&quot;1.0&quot;&gt;
+        ///&lt;dict&gt;
+        ///	&lt;key&gt;AdjustmentLayers&lt;/key&gt;
+        ///	&lt;dict&gt;
+        ///		&lt;key&gt;AccentAIExpertAdjustmentLayer&lt;/key&gt;
+        ///		&lt;dict&gt;
+        ///			&lt;key&gt;InfoImageName&lt;/key&gt;
+        ///			&lt;string&gt;accent_ai_enhancer&lt;/string&gt;
+        ///			&lt;key&gt;Effects&lt;/key&gt;
+        ///			&lt;array&gt;
+        ///				&lt;dict&gt;
+        ///					&lt;key&gt;Identifier&lt;/key&gt;
+        ///					&lt;string&gt;MIPLAccentAIExpertEffect&lt;/string&gt;
+        ///					&lt;key&gt;Parameters&lt;/key&gt;
+        ///					&lt;dict&gt;
+        ///						&lt;key&gt;Filtering Mode&lt;/key&gt;
+        ///						&lt;dict&gt;
+        ///				 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Effects {
+            get {
+                return ResourceManager.GetString("Effects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
         ///&lt;plist version=&quot;1.0&quot;&gt;
@@ -200,15 +227,16 @@ namespace PListSerializer.Core.Tests {
         ///      &lt;dict&gt;
         ///        &lt;key&gt;Id&lt;/key&gt;
         ///        &lt;string&gt;0&lt;/string&gt;
+        ///      &lt;/dict&gt;
+        ///      &lt;dict&gt;
+        ///        &lt;key&gt;Id&lt;/key&gt;
+        ///        &lt;string&gt;1&lt;/string&gt;
         ///        &lt;key&gt;ArraySameType&lt;/key&gt;
         ///        &lt;array&gt;
         ///          &lt;dict&gt;
         ///            &lt;key&gt;Id&lt;/key&gt;
-        ///            &lt;string&gt;00&lt;/string&gt;
-        ///            &lt;key&gt;ArraySameType&lt;/key&gt;
-        ///            &lt;array&gt;
-        ///              &lt;dict&gt;
-        ///                &lt; [rest of string was truncated]&quot;;.
+        ///            &lt;string&gt;10&lt;/string&gt;
+        ///          &lt;/dict&gt;        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PList6 {
             get {
