@@ -142,26 +142,50 @@ namespace PListSerializer.Core.Tests {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
         ///&lt;plist version=&quot;1.0&quot;&gt;
-        ///	&lt;dict&gt;
-        ///		&lt;key&gt;text&lt;/key&gt;
-        ///		&lt;string&gt;What does &apos;API&apos; stand for?&lt;/string&gt;
-        ///		&lt;key&gt;question1&lt;/key&gt;
-        ///		&lt;dict&gt;
-        ///			&lt;key&gt;text&lt;/key&gt;
-        ///			&lt;string&gt;4242422&lt;/string&gt;
-        ///			&lt;key&gt;text2&lt;/key&gt;
-        ///			&lt;string&gt;4242422&lt;/string&gt;
-        ///			&lt;key&gt;text3&lt;/key&gt;
-        ///			&lt;string&gt;4242422&lt;/string&gt;
-        ///			&lt;key&gt;text4&lt;/key&gt;
-        ///			&lt;string&gt;4242422&lt;/string&gt;
-        ///		&lt;/dict&gt;
-        ///	&lt;/dict&gt;
-        ///&lt;/plist&gt;.
+        ///  &lt;dict&gt;
+        ///    &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///    &lt;array&gt;
+        ///      &lt;dict&gt;
+        ///        &lt;key&gt;Id&lt;/key&gt;
+        ///        &lt;string&gt;0&lt;/string&gt;
+        ///        &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///        &lt;array&gt;
+        ///          &lt;dict&gt;
+        ///            &lt;key&gt;Id&lt;/key&gt;
+        ///            &lt;string&gt;00&lt;/string&gt;
+        ///            &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///            &lt;array&gt;
+        ///              &lt;dict&gt;
+        ///                &lt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PList4 {
             get {
                 return ResourceManager.GetString("PList4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+        ///&lt;plist version=&quot;1.0&quot;&gt;
+        ///  &lt;dict&gt;
+        ///    &lt;key&gt;ArraySameType1&lt;/key&gt;
+        ///    &lt;dict&gt;
+        ///      &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///      &lt;array&gt;
+        ///        &lt;dict&gt;
+        ///          &lt;key&gt;Id&lt;/key&gt;
+        ///          &lt;string&gt;0&lt;/string&gt;
+        ///          &lt;key&gt;ArraySameType&lt;/key&gt;
+        ///          &lt;array&gt;
+        ///            &lt;dict&gt;
+        ///              &lt;key&gt;Id&lt;/key&gt;
+        ///              &lt;string&gt;00&lt;/string&gt;
+        ///              &lt;key&gt;ArraySameType&lt;/k [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PList5 {
+            get {
+                return ResourceManager.GetString("PList5", resourceCulture);
             }
         }
     }
