@@ -55,6 +55,7 @@
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Converters\PrimitiveConverter.cs" />
     <Compile Include="Extensions\PropertyInfoExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

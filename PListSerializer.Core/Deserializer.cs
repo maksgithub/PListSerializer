@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PListNet;
@@ -44,53 +43,49 @@ namespace PListSerializer.Core
         {
             if (type.IsDictionary())
             {
-                var arrayElementType = type.GenericTypeArguments;
-                var keyConverter = GetOrBuildConverter(arrayElementType[0]);
-                var valueConverter = GetOrBuildConverter(arrayElementType[1]);
-
-                var dictionaryConverterType = typeof(DictionaryConverter<>).MakeGenericType(arrayElementType[1]);
-                return (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, valueConverter);
+                var dictionaryConverter = BuildDictionaryConverter(type);
+                return dictionaryConverter;
             }
 
             if (type.IsArray)
             {
-                Type arrayElementType = type.GetElementType();
-                var arrayElementConverter = GetOrBuildConverter(arrayElementType);
-
-                var arrayConverterType = typeof(ArrayConverter<>).MakeGenericType(arrayElementType);
-                return (IPlistConverter)Activator.CreateInstance(arrayConverterType, arrayElementConverter);
+                var arrayConverter = BuildArrayConverter(type);
+                return arrayConverter;
             }
 
+            var objectConverter = BuildObjectConverter(type);
+            return objectConverter;
+        }
+
+        private IPlistConverter BuildDictionaryConverter(Type type)
+        {
+            var valueType = type.GenericTypeArguments[1];
+            var valueConverter = GetOrBuildConverter(valueType);
+            var converterType = typeof(DictionaryConverter<>).MakeGenericType(valueType);
+            var dictionaryConverter = (IPlistConverter)Activator.CreateInstance(converterType, valueConverter);
+            return dictionaryConverter;
+        }
+
+        private IPlistConverter BuildArrayConverter(Type type)
+        {
+            var valueType = type.GetElementType();
+            var arrayElementConverter = GetOrBuildConverter(valueType);
+            var converterType = typeof(ArrayConverter<>).MakeGenericType(valueType);
+            var arrayConverter = (IPlistConverter)Activator.CreateInstance(converterType, arrayElementConverter);
+            return arrayConverter;
+        }
+
+        private IPlistConverter BuildObjectConverter(Type type)
+        {
             var properties = type.GetProperties();
 
-            var propertyInfo = properties.FirstOrDefault(x => x.PropertyType == type);
             var propertyInfos = properties
-                .Where(x => x != propertyInfo)
-                .Where(x =>
-                {
-                    var elementType = x.PropertyType.GetElementType();
-                    var b = elementType == type;
-                    var b1 = x.PropertyType.IsArray && b;
-                    return !b1;
-                })
-                .Where(x =>
-                {
-                    if (x.IsDictionary())
-                    {
-                        var t = x.PropertyType.GenericTypeArguments.FirstOrDefault(x2 => x2 == type);
-                        return t == null;
-                    }
-                    return true;
-                })
-                .ToList();
-
-            var objectPropertyConverters = propertyInfos
+                .Where(x => x.PropertyType != type)
+                .Where(x => !x.GetGenericSubTypes().Contains(type))
                 .ToDictionary(p => p, p => GetOrBuildConverter(p.PropertyType));
 
             var objectConverterType = typeof(ObjectConverter<>).MakeGenericType(type);
-            var plistConverter = (IPlistConverter)Activator
-                .CreateInstance(objectConverterType, objectPropertyConverters, propertyInfo);
-
+            var plistConverter = (IPlistConverter)Activator.CreateInstance(objectConverterType, propertyInfos);
             return plistConverter;
         }
     }

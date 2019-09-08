@@ -9,7 +9,7 @@ using PListSerializer.Core.Tests.TestsModels;
 namespace PListSerializer.Core.Tests
 {
     [TestFixture]
-    public class PListSerializerTests
+    public class PListDeserializerTests
     {
         private Deserializer _deserializer;
 
@@ -45,21 +45,24 @@ namespace PListSerializer.Core.Tests
             var node = new DictionaryNode();
             var subNode = new ArrayNode();
             var subNode2 = new ArrayNode();
+            var subNode3 = new DictionaryNode();
+            var subNode4 = new DictionaryNode();
+            var subNode5 = new DictionaryNode();
+            var subNode6 = new DictionaryNode();
             node.Add("ArraySameType", subNode);
             node.Add("ArraySameType2", subNode2);
-            var res = _deserializer.Deserialize<ClassWithArraySameType>(node);
+            node.Add("ClassSameType", subNode3);
+            node.Add("ClassSameType2", subNode4);
+            node.Add("DictionarySameType", subNode5);
+            node.Add("DictionarySameType2", subNode6);
+
+            var res = _deserializer.Deserialize<ClassWithSameTypes>(node);
             Assert.IsNotNull(res.ArraySameType);
             Assert.IsNotNull(res.ArraySameType2);
-        }
-
-        [TestCase]
-        public void Recursion_Subclass_Test()
-        {
-            var node = new DictionaryNode();
-            var subNode = new ArrayNode();
-            node.Add("SameClass", subNode);
-            var res = _deserializer.Deserialize<ClassWithClassSameType>(node);
-            Assert.IsNotNull(res.SameClass);
+            Assert.IsNotNull(res.ClassSameType);
+            Assert.IsNotNull(res.ClassSameType2);
+            Assert.IsNotNull(res.DictionarySameType);
+            Assert.IsNotNull(res.DictionarySameType2);
         }
 
         [TestCase]
@@ -114,6 +117,7 @@ namespace PListSerializer.Core.Tests
             Assert.AreEqual(source, res);
         }
 
+        [TestCase()]
         public void Deserialize_String_Test()
         {
             DateTime source = DateTime.MaxValue;
@@ -121,23 +125,6 @@ namespace PListSerializer.Core.Tests
             var res = _deserializer.Deserialize<DateTime>(node);
             Assert.That(res, Is.TypeOf<DateTime>());
             Assert.AreEqual(source, res);
-        }
-
-        [TestCase]
-        public void Serialize_quiz_Test()
-        {
-            var byteArray = Encoding.ASCII.GetBytes(Resources.PList1);
-            var stream = new MemoryStream(byteArray);
-            var node = PList.Load(stream);
-            var r = _deserializer.Deserialize<question>(node);
-            Assert.IsNotNull(r);
-            Assert.AreEqual("What does 'API' stand for?", r.text);
-
-            Assert.IsNotNull(r.question1);
-            Assert.AreEqual("4242422", r.question1.text);
-            Assert.AreEqual("4242422", r.question1.text2);
-            Assert.AreEqual("4242422", r.question1.text3);
-            Assert.AreEqual("4242422", r.question1.text4);
         }
 
         [TestCase]
@@ -154,7 +141,6 @@ namespace PListSerializer.Core.Tests
             Assert.AreEqual("259F230F-A18A-489C-87FE-024B503E1F5C", r.Id);
             Assert.IsNotNull(r.AdjustmentLayers);
             Assert.IsNotNull(r.AdjustmentLayers[0]);
-            //Assert.AreEqual("Normal", r.AdjustmentLayers[0].BlendModeIdentifier);
         }
 
         [TestCase]

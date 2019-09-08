@@ -7,7 +7,7 @@ using PListSerializer.Core.Tests.TestsModels;
 namespace PListSerializer.Core.Tests
 {
     [TestFixture]
-    public class PListCollectionsSerializeTests
+    public class PListCollectionsDeserializeTests
     {
         [TestCase]
         public void Recursion_Deep_SubclassArray_Test()
@@ -16,7 +16,7 @@ namespace PListSerializer.Core.Tests
             var stream = new MemoryStream(byteArray);
             var node = PList.Load(stream);
             var d = new Deserializer();
-            var res = d.Deserialize<ClassWithArraySameType>(node);
+            var res = d.Deserialize<ClassWithSameTypes>(node);
             Assert.IsNotNull(res.ArraySameType);
             Assert.IsNotNull("-1", res.Id);
             Assert.AreEqual("0", res.ArraySameType[0].Id);
@@ -76,7 +76,7 @@ namespace PListSerializer.Core.Tests
             var stream = new MemoryStream(byteArray);
             var node = PList.Load(stream);
             var d = new Deserializer();
-            var res = d.Deserialize<ClassWithArraySameType>(node);
+            var res = d.Deserialize<ClassWithSameTypes>(node);
             Assert.IsNotNull(res.ArraySameType);
             Assert.AreEqual("0", res.ArraySameType[0].Id);
             Assert.AreEqual("1", res.ArraySameType[1].Id);

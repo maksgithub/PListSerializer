@@ -6,7 +6,6 @@ namespace PListSerializer.Core.Tests.TestsModels
 {
     public class EffectsPlist
     {
-        //[PlistName()]
         public Dictionary<string, Layer> AdjustmentLayers { get; set; }
     }
 }

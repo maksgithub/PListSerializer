@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LayerDeserializeTests.cs" />
-    <Compile Include="PListCollectionsSerializeTests.cs" />
+    <Compile Include="PListCollectionsDeserializeTests.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -65,21 +65,20 @@
     <Content Include="Resources\Effects.txt" />
     <Compile Include="TestsModels\Effects\Parameter.cs" />
     <Compile Include="TestsModels\Effects\Root.cs" />
-    <Compile Include="TestsModels\ClassWithClassSameType.cs" />
     <Compile Include="TestsModels\Effects\Effect.cs" />
     <Compile Include="TestsModels\Effects\Layer.cs" />
     <Compile Include="TestsModels\ClassWithArray.cs" />
     <Compile Include="TestsModels\ClassWithArraySameType.cs" />
+    <Compile Include="TestsModels\ClassWithSameTypes.cs" />
     <Compile Include="TestsModels\ClassWithDictionary.cs" />
     <Compile Include="TestsModels\ClassWithDictionaryAndArraySameType.cs" />
     <Compile Include="TestsModels\ClassWithDictionarySameType.cs" />
     <Compile Include="TestsModels\EffectsPlist.cs" />
     <Compile Include="TestsModels\EmptyClass.cs" />
     <Compile Include="TestsModels\RootPList.cs" />
-    <Compile Include="PListSerializerTests.cs" />
+    <Compile Include="PListDeserializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Resources\Plist2.txt" />
-    <Compile Include="TestObjects\question.cs" />
     <Content Include="Resources\Plist3.txt" />
     <Content Include="Resources\PList6.txt" />
     <Content Include="Resources\PList5.txt" />

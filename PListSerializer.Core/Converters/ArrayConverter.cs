@@ -15,7 +15,7 @@ namespace PListSerializer.Core.Converters
 
         public TElement[] Deserialize(PNode rootNode)
         {
-            var buffer = new List<TElement>(100);
+            var buffer = new List<TElement>(10);
             if (!(rootNode is ArrayNode arrayNode))
             {
                 return default;
@@ -25,17 +25,13 @@ namespace PListSerializer.Core.Converters
             {
                 while (enumerator.MoveNext())
                 {
-                    var token = enumerator.Current;
-                    var element = _elementConverter.Deserialize(token);
+                    var pNode = enumerator.Current;
+                    var element = _elementConverter.Deserialize(pNode);
                     buffer.Add(element);
                 }
             }
 
-            var array = new TElement[buffer.Count];
-            for (var i = 0; i < array.Length; i++)
-                array[i] = buffer[i];
-
-            return array;
+            return buffer.ToArray();
         }
     }
 }

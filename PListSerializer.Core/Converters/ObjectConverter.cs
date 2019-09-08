@@ -14,7 +14,7 @@ namespace PListSerializer.Core.Converters
         private readonly Func<TObject> _activator;
         private readonly Dictionary<string, Action<TObject, PNode>> _deserializeMethods;
 
-        public ObjectConverter(Dictionary<PropertyInfo, IPlistConverter> propertyConverters, PropertyInfo propertyInfo)
+        public ObjectConverter(Dictionary<PropertyInfo, IPlistConverter> propertyConverters)
         {
             var outInstanceConstructor = typeof(TObject).GetConstructor(Array.Empty<Type>());
 
@@ -26,32 +26,7 @@ namespace PListSerializer.Core.Converters
                 pair => pair.Key.GetName(),
                 pair => BuildDeserializeMethod(pair.Key, pair.Value));
 
-            if (propertyInfo != null)
-            {
-                _deserializeMethods.Add(propertyInfo.Name, BuildDeserializeMethod(propertyInfo, this));
-            }
-            else
-            {
-                var type = typeof(TObject);
-                var elementProperty = type.GetProperties().FirstOrDefault(x => x.PropertyType.IsArray);
-                var elementType = elementProperty?.PropertyType.GetElementType();
-                if (elementType != null && type == elementType)
-                {
-                    var dictionaryConverterType = typeof(ArrayConverter<>).MakeGenericType(elementType);
-                    IPlistConverter conv = (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, this);
-                    _deserializeMethods.Add(elementProperty.Name, BuildDeserializeMethod(elementProperty, conv));
-                    return;
-                }
-
-                var d = type.GetProperties().FirstOrDefault(x => x.IsDictionary());
-                var t = d?.PropertyType.GenericTypeArguments.FirstOrDefault(x => x == type);
-                if (t!= null)
-                {
-                    var dictionaryConverterType = typeof(DictionaryConverter<>).MakeGenericType(t);
-                    var con = (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, this);
-                    _deserializeMethods.Add(d.Name, BuildDeserializeMethod(d, con));
-                }
-            }
+            AddSelfTypeDeserializeMethods();
         }
 
         public TObject Deserialize(PNode rootNode)
@@ -99,6 +74,60 @@ namespace PListSerializer.Core.Converters
             return Expression
                 .Lambda<Action<TObject, PNode>>(body, instance, parameter)
                 .Compile();
+        }
+
+        private void AddSelfTypeDeserializeMethods()
+        {
+            var type = typeof(TObject);
+            var properties = type.GetProperties();
+
+            AddSelfTypeDeserializeMethods(properties, type);
+            AddSelfArrayTypeDeserializeMethods(properties, type);
+            AddSelfDictionaryTypeDeserializeMethods(properties, type);
+        }
+
+        private void AddSelfTypeDeserializeMethods(PropertyInfo[] properties, Type type)
+        {
+            var selfTypeProperties = properties.Where(x => x.PropertyType == type);
+            foreach (var propertyInfo in selfTypeProperties)
+            {
+                AddDeserializeMethodForProperty(propertyInfo, this);
+            }
+        }
+
+        private void AddSelfDictionaryTypeDeserializeMethods(PropertyInfo[] properties, Type type)
+        {
+            var selfTypeDictionaryProperties = properties
+                .Where(x => x.PropertyType.IsDictionary())
+                .Where(x => x.PropertyType.GenericTypeArguments.Contains(type));
+
+            foreach (var propertyInfo in selfTypeDictionaryProperties)
+            {
+                var elementType = propertyInfo.PropertyType.GenericTypeArguments.FirstOrDefault(x => x == type);
+                var dictionaryConverterType = typeof(DictionaryConverter<>).MakeGenericType(elementType);
+                var converter = (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, this);
+                AddDeserializeMethodForProperty(propertyInfo, converter);
+            }
+        }
+
+        private void AddSelfArrayTypeDeserializeMethods(PropertyInfo[] properties, Type type)
+        {
+            var selfTypeArrayProperties = properties
+                .Where(x => x.PropertyType.IsArray)
+                .Where(x => x.PropertyType.GetElementType() == type);
+
+            foreach (var propertyInfo in selfTypeArrayProperties)
+            {
+                var elementType = propertyInfo.PropertyType.GetElementType();
+                var dictionaryConverterType = typeof(ArrayConverter<>).MakeGenericType(elementType);
+                var converter = (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, this);
+                AddDeserializeMethodForProperty(propertyInfo, converter);
+            }
+        }
+
+        private void AddDeserializeMethodForProperty(PropertyInfo propertyInfo, IPlistConverter plistConverter)
+        {
+            _deserializeMethods.Add(propertyInfo.Name, BuildDeserializeMethod(propertyInfo, plistConverter));
         }
     }
 }

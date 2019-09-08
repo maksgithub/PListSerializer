@@ -2,7 +2,6 @@
 using System.Text;
 using NUnit.Framework;
 using PListNet;
-using PListSerializer.Core.Tests.TestsModels;
 using PListSerializer.Core.Tests.TestsModels.Effects;
 
 namespace PListSerializer.Core.Tests
