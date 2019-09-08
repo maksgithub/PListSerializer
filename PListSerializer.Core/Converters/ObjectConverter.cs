@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using PListNet;
 using PListNet.Nodes;
+using PListSerializer.Core.Extensions;
 
 namespace PListSerializer.Core.Converters
 {
     public class ObjectConverter<TObject> : IPlistConverter<TObject>
     {
         private readonly Func<TObject> _activator;
-        private readonly EqualityComparer<TObject> _equalityComparer;
         private readonly Dictionary<string, Action<TObject, PNode>> _deserializeMethods;
 
         public ObjectConverter(Dictionary<PropertyInfo, IPlistConverter> propertyConverters)
@@ -24,41 +23,28 @@ namespace PListSerializer.Core.Converters
                 : Expression.Lambda<Func<TObject>>(Expression.New(outInstanceConstructor)).Compile();
 
             _deserializeMethods = propertyConverters.ToDictionary(
-                pair => pair.Key.Name,
+                pair => pair.Key.GetName(),
                 pair => BuildDeserializeMethod(pair.Key, pair.Value));
 
-            _equalityComparer = EqualityComparer<TObject>.Default;
+            AddSelfTypeDeserializeMethods();
         }
 
-        public TObject Deserialize(PNode tokenizer1)
+        public TObject Deserialize(PNode rootNode)
         {
             var instance = _activator();
-            if (tokenizer1 is DictionaryNode tokenizer2)
+            if (rootNode is DictionaryNode dictionaryNode)
             {
-                var tokenizer = tokenizer2.GetEnumerator();
-                while (tokenizer.MoveNext())
+                using (var enumerator = dictionaryNode.GetEnumerator())
                 {
-                    var token = tokenizer.Current;
-                    //var tokenType = token.;
-
-                    // ReSharper disable once ConvertIfStatementToSwitchStatement
-                    //if (tokenType == JsonTokenType.Null) return default;
-                    //if (tokenType == JsonTokenType.ObjectStart) continue;
-                    //if (tokenType == JsonTokenType.ObjectEnd) break;
-
-                    //if (tokenType != JsonTokenType.Property)
-                    //{
-                    //    throw new InvalidCastException($"Invalid token '{token}' in object");
-                    //}
-
-                    var propertyName = token.Key;
-
-                    //tokenizer.MoveNext(); // to property value
-
-                    //if (tokenizer.Current.Value == null) continue;
-                    if (!_deserializeMethods.TryGetValue(propertyName, out var converter)) continue;
-
-                    converter(instance, token.Value);
+                    while (enumerator.MoveNext())
+                    {
+                        var token = enumerator.Current;
+                        var propertyName = token.Key;
+                        if (_deserializeMethods.TryGetValue(propertyName, out var converter))
+                        {
+                            converter(instance, token.Value);
+                        }
+                    }
                 }
             }
 
@@ -70,8 +56,8 @@ namespace PListSerializer.Core.Converters
         {
             const string deserializeMethodName = nameof(IPlistConverter<object>.Deserialize);
 
-            var instance = Expression.Parameter(typeof(TObject), "instance");
-            var tokenizer = Expression.Parameter(typeof(PNode), "tokenizer");
+            var instance = Expression.Parameter(typeof(TObject));
+            var parameter = Expression.Parameter(typeof(PNode));
 
             var converterType = propertyValueConverter.GetType();
             var deserializeMethod = converterType.GetMethod(deserializeMethodName);
@@ -82,12 +68,66 @@ namespace PListSerializer.Core.Converters
             }
 
             var converter = Expression.Constant(propertyValueConverter, converterType);
-            var propertyValue = Expression.Call(converter, deserializeMethod, tokenizer);
+            var propertyValue = Expression.Call(converter, deserializeMethod, parameter);
 
             var body = Expression.Assign(Expression.Property(instance, property), propertyValue);
             return Expression
-                .Lambda<Action<TObject, PNode>>(body, instance, tokenizer)
+                .Lambda<Action<TObject, PNode>>(body, instance, parameter)
                 .Compile();
+        }
+
+        private void AddSelfTypeDeserializeMethods()
+        {
+            var type = typeof(TObject);
+            var properties = type.GetProperties();
+
+            AddSelfTypeDeserializeMethods(properties, type);
+            AddSelfArrayTypeDeserializeMethods(properties, type);
+            AddSelfDictionaryTypeDeserializeMethods(properties, type);
+        }
+
+        private void AddSelfTypeDeserializeMethods(PropertyInfo[] properties, Type type)
+        {
+            var selfTypeProperties = properties.Where(x => x.PropertyType == type);
+            foreach (var propertyInfo in selfTypeProperties)
+            {
+                AddDeserializeMethodForProperty(propertyInfo, this);
+            }
+        }
+
+        private void AddSelfDictionaryTypeDeserializeMethods(PropertyInfo[] properties, Type type)
+        {
+            var selfTypeDictionaryProperties = properties
+                .Where(x => x.PropertyType.IsDictionary())
+                .Where(x => x.PropertyType.GenericTypeArguments.Contains(type));
+
+            foreach (var propertyInfo in selfTypeDictionaryProperties)
+            {
+                var elementType = propertyInfo.PropertyType.GenericTypeArguments.FirstOrDefault(x => x == type);
+                var dictionaryConverterType = typeof(DictionaryConverter<>).MakeGenericType(elementType);
+                var converter = (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, this);
+                AddDeserializeMethodForProperty(propertyInfo, converter);
+            }
+        }
+
+        private void AddSelfArrayTypeDeserializeMethods(PropertyInfo[] properties, Type type)
+        {
+            var selfTypeArrayProperties = properties
+                .Where(x => x.PropertyType.IsArray)
+                .Where(x => x.PropertyType.GetElementType() == type);
+
+            foreach (var propertyInfo in selfTypeArrayProperties)
+            {
+                var elementType = propertyInfo.PropertyType.GetElementType();
+                var dictionaryConverterType = typeof(ArrayConverter<>).MakeGenericType(elementType);
+                var converter = (IPlistConverter)Activator.CreateInstance(dictionaryConverterType, this);
+                AddDeserializeMethodForProperty(propertyInfo, converter);
+            }
+        }
+
+        private void AddDeserializeMethodForProperty(PropertyInfo propertyInfo, IPlistConverter plistConverter)
+        {
+            _deserializeMethods.Add(propertyInfo.Name, BuildDeserializeMethod(propertyInfo, plistConverter));
         }
     }
 }
