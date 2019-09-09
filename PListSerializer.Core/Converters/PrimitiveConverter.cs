@@ -2,11 +2,11 @@
 
 namespace PListSerializer.Core.Converters
 {
-    public class PrimitiveConverter<T> : IPlistConverter<T>
+    internal class PrimitiveConverter<T> : IPlistConverter<T>
     {
-        public T Deserialize(PNode node)
+        public T Deserialize(PNode rootNode)
         {
-            if (node is PNode<T> genericNode)
+            if (rootNode is PNode<T> genericNode)
             {
                 return genericNode.Value;
             }

@@ -1,16 +1,12 @@
 ﻿using System;
-using System.IO;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
-using PListNet;
+using NUnit.Framework.Internal;
 using PListNet.Nodes;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace PListSerializer.Core.Tests
+namespace PListSerializer.Core.Tests.Tests
 {
-    [TestClass]
-    public class PListSerializerTests
+    [TestFixture()]
+    public class PListDeserializePrimitiveTypesTests
     {
         private Deserializer _deserializer;
 
@@ -27,7 +23,7 @@ namespace PListSerializer.Core.Tests
         {
             var node = new IntegerNode(source);
             var res = _deserializer.Deserialize<int>(node);
-            Assert.IsInstanceOfType(res, typeof(int));
+            Assert.That(res, Is.TypeOf<int>());
             Assert.AreEqual(source, res);
         }
 
@@ -38,7 +34,7 @@ namespace PListSerializer.Core.Tests
         {
             var node = new IntegerNode(source);
             var res = _deserializer.Deserialize<long>(node);
-            Assert.IsInstanceOfType(res, typeof(long));
+            Assert.That(res, Is.TypeOf<long>());
             Assert.AreEqual(source, res);
         }
 
@@ -48,7 +44,7 @@ namespace PListSerializer.Core.Tests
         {
             var node = new BooleanNode(source);
             var res = _deserializer.Deserialize<bool>(node);
-            Assert.IsInstanceOfType(res, typeof(bool));
+            Assert.That(res, Is.TypeOf<bool>());
             Assert.AreEqual(source, res);
         }
 
@@ -58,32 +54,18 @@ namespace PListSerializer.Core.Tests
         {
             var node = new StringNode(source);
             var res = _deserializer.Deserialize<string>(node);
-            Assert.IsInstanceOfType(res, typeof(string));
+            Assert.That(res, Is.TypeOf<string>());
             Assert.AreEqual(source, res);
         }
 
+        [TestCase()]
         public void Deserialize_String_Test()
         {
             DateTime source = DateTime.MaxValue;
             var node = new DateNode(source);
             var res = _deserializer.Deserialize<DateTime>(node);
-            Assert.IsInstanceOfType(res, typeof(DateTime));
+            Assert.That(res, Is.TypeOf<DateTime>());
             Assert.AreEqual(source, res);
-        }
-        [TestCase]
-        public void Serialize_quiz_Test()
-        {
-            var byteArray = Encoding.ASCII.GetBytes(Resources.PList1);
-            var stream = new MemoryStream(byteArray);
-            var node = PList.Load(stream);
-            var d = new Deserializer();
-            var r = d.Deserialize<question>(node);
-            Assert.IsNotNull(r);
-            Assert.AreEqual("What does 'API' stand for?", r.text);
-            Assert.AreEqual("API stands for Application Programming Interface.", r.answer);
-
-            Assert.IsNotNull(r.question1);
-            Assert.AreEqual("4242422", r.question1.text);
         }
     }
 }

@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using PListNet;
-using PListNet.Nodes;
 using PListSerializer.Core.Converters;
 using PListSerializer.Core.Extensions;
 
@@ -29,62 +24,82 @@ namespace PListSerializer.Core
                 {typeof(DateTime), new PrimitiveConverter<DateTime>()},
             };
         }
-        public T Deserialize1<T>(PNode node) where T : class, new()
-        {
-            var constructor = typeof(T).GetConstructor(Array.Empty<Type>());
-            var r = Expression.Lambda<Func<T>>(Expression.New(constructor)).Compile();
-            var deserialize = r();
-            var s = typeof(T).Name;
-            var dNode = node.GetValue<DictionaryNode>(s);
-            foreach (var prop in deserialize.GetType().GetProperties())
-            {
-                var p = dNode.GetValue<string>(prop.Name);
-                prop.SetValue(deserialize, p);
-            }
 
-            return deserialize;
-        }
         public TOut Deserialize<TOut>(PNode source)
         {
             var outType = typeof(TOut);
             var converter = GetOrBuildConverter(outType);
-           // using (var tokenizer = new JsonTokenizer(source, _buffer))
-            {
-               // if (outType.IsPrimitive || outType == typeof(string)) tokenizer.MoveNext();
-
-                var typedConverter = (IPlistConverter<TOut>)converter;
-                return typedConverter.Deserialize(source);
-            }
+            var typedConverter = (IPlistConverter<TOut>)converter;
+            var deserialize = typedConverter.Deserialize(source);
+            return deserialize;
         }
 
         private IPlistConverter GetOrBuildConverter(Type type)
         {
-            if (_converters.TryGetValue(type, out var exists)) return exists;
-
-            var converter = BuildConverter(type);
-            _converters.Add(type, converter);
-
-            return converter;
+            return _converters.GetOrAdd(type, () => BuildConverter(type));
         }
 
         private IPlistConverter BuildConverter(Type type)
         {
-            if (type.IsArray)
+            if (type.IsDictionary())
             {
-                var arrayElementType = type.GetElementType();
-                var arrayElementConverter = GetOrBuildConverter(arrayElementType);
-
-                //var arrayConverterType = typeof(ArrayConverter<>).MakeGenericType(arrayElementType);
-                //return (IPlistConverter)Activator.CreateInstance(arrayConverterType, arrayElementConverter);
-                return default;
+                var dictionaryConverter = BuildDictionaryConverter(type);
+                return dictionaryConverter;
+            }
+            else if (type.IsArray)
+            {
+                var arrayConverter = BuildArrayConverter(type);
+                return arrayConverter;
+            }
+            else if (type.IsList())
+            {
+                var arrayConverter = BuildListConverter(type);
+                return arrayConverter;
             }
 
-            var objectPropertyConverters = type
-                .GetProperties()
+            var objectConverter = BuildObjectConverter(type);
+            return objectConverter;
+        }
+
+        private IPlistConverter BuildDictionaryConverter(Type type)
+        {
+            var valueType = type.GenericTypeArguments[1];
+            var valueConverter = GetOrBuildConverter(valueType);
+            var converterType = typeof(DictionaryConverter<>).MakeGenericType(valueType);
+            var dictionaryConverter = (IPlistConverter)Activator.CreateInstance(converterType, valueConverter);
+            return dictionaryConverter;
+        }
+
+        private IPlistConverter BuildArrayConverter(Type type)
+        {
+            var valueType = type.GetElementType();
+            var arrayElementConverter = GetOrBuildConverter(valueType);
+            var converterType = typeof(ArrayConverter<>).MakeGenericType(valueType);
+            var arrayConverter = (IPlistConverter)Activator.CreateInstance(converterType, arrayElementConverter);
+            return arrayConverter;
+        }
+
+        private IPlistConverter BuildListConverter(Type type)
+        {
+            var valueType = type.GenericTypeArguments[0];
+            var arrayElementConverter = GetOrBuildConverter(valueType);
+            var converterType = typeof(ListConverter<>).MakeGenericType(valueType);
+            var arrayConverter = (IPlistConverter)Activator.CreateInstance(converterType, arrayElementConverter);
+            return arrayConverter;
+        }
+
+        private IPlistConverter BuildObjectConverter(Type type)
+        {
+            var properties = type.GetProperties();
+
+            var propertyInfos = properties
+                .Where(x => x.PropertyType != type)
+                .Where(x => !x.GetGenericSubTypes().Contains(type))
                 .ToDictionary(p => p, p => GetOrBuildConverter(p.PropertyType));
 
             var objectConverterType = typeof(ObjectConverter<>).MakeGenericType(type);
-            return (IPlistConverter)Activator.CreateInstance(objectConverterType, objectPropertyConverters);
+            var plistConverter = (IPlistConverter)Activator.CreateInstance(objectConverterType, propertyInfos);
+            return plistConverter;
         }
     }
 }

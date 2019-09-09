@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,16 +45,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\PlistNameAttribute.cs" />
+    <Compile Include="Converters\ArrayConverter.cs" />
+    <Compile Include="Converters\DictionaryConverter.cs" />
     <Compile Include="Converters\IntegerConverter.cs" />
     <Compile Include="Converters\IPlistConverter.cs" />
+    <Compile Include="Converters\ListConverter.cs" />
     <Compile Include="Converters\ObjectConverter.cs" />
     <Compile Include="Deserializer.cs" />
-    <Compile Include="Extensions\PlistExtensions.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Converters\PrimitiveConverter.cs" />
+    <Compile Include="Extensions\PropertyInfoExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
